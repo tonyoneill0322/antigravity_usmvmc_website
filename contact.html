@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join & Contact - USMV MC</title>
+  <meta name="description" content="Apply to join the U.S. Military Veterans Motorcycle Club (USMV MC) or get in touch with local chapter officers.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header id="main-header"></header>
+
+  <!-- Contact Grid Page -->
+  <section class="section">
+    <div class="contact-grid">
+      <!-- Form Section -->
+      <div>
+        <h2>Contact & Application</h2>
+        <p style="margin-bottom: 2rem;">
+          To contact a local officer or begin the prospecting process to join the USMV MC, please fill out the form below. For membership applications, ensure you meet the requirements on the right.
+        </p>
+
+        <form id="join-form" action="#" method="POST">
+          <!-- Name -->
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="John 'Slick' Doe" required>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="john.doe@example.com" required>
+          </div>
+
+          <!-- Service Branch -->
+          <div class="form-group">
+            <label for="service-branch">Military Service Branch</label>
+            <select id="service-branch" name="service_branch" class="form-control">
+              <option value="">-- Select Branch (If applying to join) --</option>
+              <option value="army">U.S. Army</option>
+              <option value="navy">U.S. Navy</option>
+              <option value="marines">U.S. Marine Corps</option>
+              <option value="airforce">U.S. Air Force</option>
+              <option value="coastguard">U.S. Coast Guard</option>
+              <option value="spaceforce">U.S. Space Force</option>
+              <option value="active_duty">Active Duty (Any Branch)</option>
+              <option value="other">Non-Vet (Supporter Interest)</option>
+            </select>
+          </div>
+
+          <!-- Motorcycle details -->
+          <div class="form-group">
+            <label for="bike-info">Motorcycle Brand & Displacement</label>
+            <input type="text" id="bike-info" name="bike_info" class="form-control" placeholder="e.g., Harley-Davidson Softail (1690cc)">
+          </div>
+
+          <!-- Message -->
+          <div class="form-group">
+            <label for="message">Message / Application Statement *</label>
+            <textarea id="message" name="message" class="form-control" placeholder="Tell us about yourself, your service background, and why you want to ride with USMV MC..." required></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="submit-contact">Submit Application</button>
+          
+          <!-- Success/Error Message container -->
+          <div id="form-feedback" class="form-feedback"></div>
+        </form>
+      </div>
+
+      <!-- Requirements Block -->
+      <div>
+        <div class="requirements-box">
+          <h3 id="req-heading">Membership Requirements</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-secondary);">
+            USMV MC is a traditional MC. Prospecting is a process built on commitment, honor, and time on the road. The minimum entry standards are:
+          </p>
+          <ul class="requirements-list">
+            <li><strong>Military Service</strong>: Must be a current active-duty service member or a veteran discharged honorably (DD-214 verification required).</li>
+            <li><strong>Cruiser Bike</strong>: Must own and ride a cruiser-style motorcycle with an engine capacity of 750cc or greater.</li>
+            <li><strong>License & Insurance</strong>: Must possess a valid motorcycle license (with proper state endorsement) and valid liability insurance.</li>
+            <li><strong>Brotherhood</strong>: Willingness to pledge loyalty to the club, participate in weekly meetings, and attend charity support runs.</li>
+            <li><strong>Drug Policy</strong>: We adhere to clean and sober riding standards; respect for road safety is absolute.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer id="main-footer"></footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

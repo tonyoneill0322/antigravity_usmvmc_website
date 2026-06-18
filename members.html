@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members Only - USMV MC</title>
+  <meta name="description" content="Secure portal for patched members of the U.S. Military Veterans Motorcycle Club. Access club documents and internal announcements.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header id="main-header"></header>
+
+  <!-- Main Content Area -->
+  <section class="section">
+    
+    <!-- Passcode Gate Screen -->
+    <div id="member-gate" class="gate-wrapper" style="display: none;">
+      <div class="gate-card">
+        <div class="gate-icon">🔒</div>
+        <h2>SECURE PORTAL</h2>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
+          This area is restricted to patched members of the U.S. Military Veterans MC. Enter the season passcode below to access announcements and downloads.
+        </p>
+
+        <form id="gate-form" action="#">
+          <div class="form-group">
+            <label for="member-passcode">Club Passcode</label>
+            <input type="password" id="member-passcode" class="form-control" placeholder="••••••••" required style="text-align: center; letter-spacing: 2px;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="submit-passcode">Unlock Dashboard</button>
+          
+          <div id="passcode-feedback" class="form-feedback" style="margin-top: 1.5rem;"></div>
+        </form>
+        
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2rem; margin-bottom: 0;">
+          Forgot the code? Contact your local chapter Secretary.
+        </p>
+      </div>
+    </div>
+
+    <!-- Patched Members Dashboard -->
+    <div id="members-dashboard" class="members-dashboard" style="display: none;">
+      
+      <!-- Logout / Welcomer Bar -->
+      <div class="logout-bar">
+        <div>
+          <span style="font-family: var(--font-heading); color: var(--accent-gold); font-size: 1.1rem; letter-spacing: 1px;">WELCOME, PATCHED BROTHER</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 10px;">| USMV MC Internal Portal</span>
+        </div>
+        <button id="logout-btn" class="btn" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-color: var(--text-muted); color: var(--text-secondary);">Logout</button>
+      </div>
+
+      <h2>Internal Dashboard</h2>
+      
+      <div class="members-grid">
+        
+        <!-- Announcements Column -->
+        <div>
+          <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Club Announcements</h3>
+          
+          <!-- Announcement 1 -->
+          <div class="announcement-card">
+            <div class="announcement-meta">
+              <span>Mother Chapter Vote</span>
+              <span>June 24, 2026</span>
+            </div>
+            <h4>Bylaws Amendment Vote (Section IV)</h4>
+            <p style="font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0;">
+              All patched members are required to attend the upcoming monthly meeting on July 5th. We will be voting on a proposed amendment to Section IV regarding prospect duration standards. Absentee ballots must be submitted to the Secretary by July 2nd.
+            </p>
+          </div>
+
+          <!-- Announcement 2 -->
+          <div class="announcement-card">
+            <div class="announcement-meta">
+              <span>National Safety Officer</span>
+              <span>June 15, 2026</span>
+            </div>
+            <h4>Group Ride Signal Review</h4>
+            <p style="font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0;">
+              Before the upcoming Veterans Memorial Ride, please review the standard hand signals for road hazards, single file, double file, and fuel stops. Road Captains will conduct a safety brief 30 minutes before kickstands up. Safety first, brothers.
+            </p>
+          </div>
+
+          <!-- Announcement 3 -->
+          <div class="announcement-card">
+            <div class="announcement-meta">
+              <span>Treasury Report</span>
+              <span>June 01, 2026</span>
+            </div>
+            <h4>Spring Poker Run Charity Totals</h4>
+            <p style="font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0;">
+              Thanks to the outstanding turnout and local sponsorships, our Spring Charity Run raised a total of $14,250 for the Veteran Crisis Assistance Fund. Excellent work from all volunteers and road captains.
+            </p>
+          </div>
+        </div>
+
+        <!-- Downloads Column -->
+        <div>
+          <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Resources & Files</h3>
+          
+          <div class="member-doc">
+            <div class="member-doc-info">
+              <h4>National Constitution</h4>
+              <span>Updated Jan 2026 | PDF</span>
+            </div>
+            <a href="#" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</a>
+          </div>
+
+          <div class="member-doc">
+            <div class="member-doc-info">
+              <h4>Memorial Ride Route MAP</h4>
+              <span>GPX Navigation File | ZIP</span>
+            </div>
+            <a href="#" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</a>
+          </div>
+
+          <div class="member-doc">
+            <div class="member-doc-info">
+              <h4>Meeting Minutes - May</h4>
+              <span>Published June 2, 2026 | PDF</span>
+            </div>
+            <a href="#" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</a>
+          </div>
+
+          <div class="member-doc">
+            <div class="member-doc-info">
+              <h4>Prospect Handbook</h4>
+              <span>Bylaws & Etiquette | PDF</span>
+            </div>
+            <a href="#" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer id="main-footer"></footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
