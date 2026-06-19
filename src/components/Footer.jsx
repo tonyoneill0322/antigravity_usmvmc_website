@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
@@ -8,7 +8,7 @@ function Footer() {
     <footer>
       <div className="footer-container">
         <div className="footer-about">
-          <h3>USMV MC</h3>
+          <h3>USMVMC</h3>
           <p>
             The U.S. Military Veterans Motorcycle Club (USMVMC) is a motorcycle club first, founded on the brotherhood,
             loyalty, and shared values of military veterans while supporting local veteran communities through
@@ -19,22 +19,22 @@ function Footer() {
           <h3>Quick Links</h3>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <NavLink to="/" end>Home</NavLink>
             </li>
             <li>
-              <Link to="/about">About & History</Link>
+              <NavLink to="/about">About & History</NavLink>
             </li>
             <li>
-              <Link to="/events">Rides & Events</Link>
+              <NavLink to="/events">Rides & Events</NavLink>
             </li>
             <li>
-              <Link to="/gallery">Photo Gallery</Link>
+              <NavLink to="/gallery">Photo Gallery</NavLink>
             </li>
             <li>
-              <Link to="/contact">Join / Contact</Link>
+              <NavLink to="/contact">Join / Contact</NavLink>
             </li>
             <li>
-              <Link to="/members">Members Area</Link>
+              <NavLink to="/members">Members Area</NavLink>
             </li>
           </ul>
         </div>

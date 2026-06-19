@@ -12,7 +12,9 @@ function Home() {
   const heroTaglineRef = useRef(null)
   const heroButtonsRef = useRef(null)
   const heroBgRef = useRef(null)
-  const cardsRef = useRef([])
+  const striveRef = useRef(null)
+  const memoRef = useRef(null)
+  const philosophySectionRef = useRef(null)
 
   useGSAP(() => {
     // 1. Hero Load Animations
@@ -36,18 +38,58 @@ function Home() {
       { opacity: 1, y: 0, duration: 1.2, delay: 0.7, ease: 'power3.out' }
     )
 
-    // 2. Scroll Animations for Feature Cards
-    if (cardsRef.current.length > 0) {
-      gsap.fromTo(cardsRef.current,
-        { opacity: 0, y: 60 },
+
+
+    // 3. Scroll Trigger for What We Strive For
+    if (striveRef.current) {
+      const striveCards = striveRef.current.querySelectorAll('.strive-card')
+      gsap.fromTo(striveCards,
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
           duration: 1,
+          stagger: 0.15,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: striveRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          }
+        }
+      )
+    }
+
+    // 4. Scroll Trigger for Memo from the National President
+    if (memoRef.current) {
+      gsap.fromTo(memoRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: memoRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        }
+      )
+    }
+
+    // 5. Scroll Trigger for Philosophy & Earning Your Patch
+    if (philosophySectionRef.current) {
+      gsap.fromTo(philosophySectionRef.current.children,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
           stagger: 0.2,
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: '.feature-grid',
+            trigger: philosophySectionRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           }
@@ -87,60 +129,146 @@ function Home() {
           <h2 id="mission-heading">Fostering Brotherhood & Service</h2>
           <p style={{ fontSize: '1.25rem', lineHeight: 1.8, color: 'var(--text-primary)', marginTop: '2rem' }}>
             The U.S. Military Veterans Motorcycle Club is a traditional motorcycle club established for military veterans,
-            active duty personnel, and those who share our commitment to supporting our brothers and sisters in arms. We
+            active-duty personnel, and those who share our commitment to supporting our brothers in arms. We
             ride to keep the flame of veteran support burning, honoring our fallen, and protecting the values of freedom and
             honor.
           </p>
         </div>
       </section>
 
-      {/* Feature Highlights */}
-      <section className="section section-alt">
+      {/* What We Strive For */}
+      <section ref={striveRef} className="section section-alt">
         <div className="section-container">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 id="features-heading">What We Do</h2>
+            <h2 id="strive-heading">What We Strive For</h2>
           </div>
           <div className="feature-grid">
-            {/* Card 1 */}
-            <div 
-              ref={(el) => (cardsRef.current[0] = el)} 
-              className="feature-card"
-            >
+            {/* Strive Card 1 */}
+            <div className="strive-card feature-card">
+              <div className="feature-icon">🤝</div>
+              <h3>Brotherhood</h3>
+              <p>
+                To provide a club for qualified male military veterans which offers brotherhood and an opportunity to establish
+                relationships with other military veterans who have served in the defense of the United States of America.
+              </p>
+            </div>
+            {/* Strive Card 2 */}
+            <div className="strive-card feature-card">
               <div className="feature-icon">🎖️</div>
-              <h3 id="feat-brotherhood">Veteran Brotherhood</h3>
+              <h3>Pride & Honor</h3>
               <p>
-                Fostering an authentic, strong support structure for veterans adjusting to civilian life, maintaining the
-                camaraderie found during service.
+                To establish and support a strong sense of pride in having served in the active military service of the
+                United States of America.
               </p>
             </div>
-            {/* Card 2 */}
-            <div 
-              ref={(el) => (cardsRef.current[1] = el)} 
-              className="feature-card"
-            >
-              <div className="feature-icon">
-                <svg viewBox="0 0 64 64" fill="currentColor">
-                  <path d="M53 32a9.95 9.95 0 0 0-2.487.326l-1.27-2.6A25.58 25.58 0 0 1 59 28a2 2 0 0 0 0-4 28.9 28.9 0 0 0-11.507 2.145c-2.838-5.8-5.387-10.99-5.641-11.416-.532-.885-1.64-2.729-3.8-2.729H31a2 2 0 0 0 0 4h6.887a5.783 5.783 0 0 1 .521.762c.1.178.477.932 1.051 2.09C33.247 23.5 27.978 28 24.045 28H20.9C14.985 23.322 7.007 22 3 22a2 2 0 0 0 0 4c.166 0 13.837.313 19.136 9.389l-2.789 1.117a10.152 10.152 0 1 0 1.485 3.713l2.822-1.129a16.831 16.831 0 0 1 .5 3.053A2 2 0 0 0 26.153 44H37a2 2 0 0 0 1.983-1.752 16.424 16.424 0 0 1 6.737-10.611c.4.809.794 1.627 1.192 2.445A9.981 9.981 0 1 0 53 32zM17 42a6.023 6.023 0 1 1-1.5-3.953l-5.244 2.1a2 2 0 1 0 1.486 3.713l5.244-2.1c.007.08.014.16.014.24zm36 6a5.995 5.995 0 0 1-4.272-10.205c.863 1.77 1.7 3.494 2.474 5.082a2 2 0 0 0 3.6-1.75c-.593-1.221-1.464-3.01-2.476-5.086A6 6 0 1 1 53 48z" />
-                </svg>
+            {/* Strive Card 3 */}
+            <div className="strive-card feature-card">
+              <div className="feature-icon">🏍️</div>
+              <h3>Public Image</h3>
+              <p>
+                To improve the image of military veterans and bikers to the general public.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy of the Traditional MC & Earning Your Patch */}
+      <section className="section section-alt">
+        <div className="section-container">
+          <div 
+            ref={philosophySectionRef} 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+              gap: '4rem' 
+            }}
+          >
+            {/* Philosophy */}
+            <div>
+              <h2 id="philosophy-heading" style={{ borderBottom: '2px solid var(--accent-gold)', paddingBottom: '0.5rem', marginBottom: '1.5rem', display: 'inline-block' }}>
+                Philosophy of the Traditional MC
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1.5rem' }}>
+                <div style={{ borderLeft: '3px solid var(--accent-amber)', paddingLeft: '1.5rem' }}>
+                  <p style={{ marginBottom: 0, color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--accent-gold)', fontWeight: 'bold' }}>Motorcycle Community Stature:</strong> Regardless of the philosophy of our club, it is important that you understand the perspectives of other clubs that you may be associating with from time to time. If motorcycles influence your lifestyle, then you are part of the motorcycle community. Of all the types of organizations found within that community, the traditional MC stands apart and ranks highest in stature.
+                  </p>
+                </div>
+                <div style={{ borderLeft: '3px solid var(--accent-amber)', paddingLeft: '1.5rem' }}>
+                  <p style={{ marginBottom: 0, color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--accent-gold)', fontWeight: 'bold' }}>Adhering to Protocol:</strong> As in all organizations and clubs, there is a protocol, which is to be learned, memorized, and adhered to from the time of becoming a Probate and Patch Holder. This protocol is to be followed closely, or one's membership may be jeopardized. Lack of knowledge could compromise the chapter and club itself.
+                  </p>
+                </div>
               </div>
-              <h3 id="feat-rides">Club Runs & Events</h3>
-              <p>
-                Organizing veterans support runs, memorial escorts, and charity motorcycle poker runs to raise awareness
-                and support veteran funds.
+            </div>
+
+            {/* Earning Your Patch */}
+            <div style={{ backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', padding: '2.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+              <h2 id="patch-heading" style={{ borderBottom: '2px solid var(--accent-gold)', paddingBottom: '0.5rem', marginBottom: '1.5rem', display: 'inline-block' }}>
+                Earning Your Patch
+              </h2>
+              <p style={{ color: 'var(--text-primary)', fontWeight: '600', marginBottom: '1.25rem', marginTop: '1.5rem' }}>
+                You will see what Patch Holders must go through to "Earn" their Patch. This is why we show them the respect they've earned. It's also the reason you will be shown respect by other Patch Holders.
+              </p>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+                Being a Patch Holder in an MC is an honor not to be taken lightly. You will be looked up to by independent bikers; you will be looked at as an equal by other Patch Holders; and you will be looked at with curiosity, and in some cases, disdain by the casual motorcyclists that are out there.
+              </p>
+              <p style={{ color: 'var(--accent-amber)', fontWeight: 'bold', marginBottom: 0 }}>
+                These are the reasons why we expect and demand that you behave in a way that brings no dishonor or disrespect to the Club whatsoever! You will be watched, and everyone you see will remember how you carry your Colors!
               </p>
             </div>
-            {/* Card 3 */}
-            <div 
-              ref={(el) => (cardsRef.current[2] = el)} 
-              className="feature-card"
-            >
-              <div className="feature-icon">🇺🇸</div>
-              <h3 id="feat-community">Community Support</h3>
-              <p>
-                Partnering with local veteran organizations, VA clinics, and homeless shelters to provide hands-on
-                community service and care packages.
-              </p>
-            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Memo from the National President */}
+      <section className="section">
+        <div 
+          ref={memoRef} 
+          style={{ 
+            backgroundColor: 'var(--bg-secondary)', 
+            border: '1px solid var(--accent-gold)', 
+            borderRadius: '6px', 
+            padding: '3rem', 
+            position: 'relative', 
+            boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)' 
+          }}
+        >
+          <div 
+            style={{ 
+              position: 'absolute', 
+              top: '-15px', 
+              left: '30px', 
+              backgroundColor: 'var(--accent-gold)', 
+              color: 'var(--text-dark)', 
+              padding: '0.25rem 1rem', 
+              fontFamily: 'var(--font-heading)', 
+              fontWeight: 'bold', 
+              textTransform: 'uppercase', 
+              fontSize: '0.85rem', 
+              borderRadius: '4px', 
+              letterSpacing: '1px' 
+            }}
+          >
+            Official Club Communication
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', color: 'var(--accent-gold)', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+            Memo from the National President
+          </h3>
+          <div style={{ fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '1.05rem' }}>
+            <p style={{ marginBottom: '1.25rem' }}>
+              "If you are ready, you are about to enter the Motorcycle Club world. It is a lot of fun if you maintain the right state of mind. If you are looking to ride and have the camaraderie with other Brothers who have also served our Country, then you have come to the right place."
+            </p>
+            <p style={{ marginBottom: '1.25rem' }}>
+              "We do a lot of things in a military way, but we are an MC first and a Veteran club second. The training you will receive is very important to you as a new Probate. Do not take it lightly."
+            </p>
+            <p style={{ marginBottom: '1.25rem' }}>
+              "To survive in the MC world, you will have to learn it. Your Eagle (Full Patch status) will not be given until this information is learned."
+            </p>
+            <p style={{ marginBottom: 0, fontWeight: 'bold', color: 'var(--accent-amber)' }}>
+              "Good luck. If you are the right man, you have chosen the right club. We only accept the best."
+            </p>
           </div>
         </div>
       </section>

@@ -1,12 +1,17 @@
 # Set root directory for gallery (relative to the script location)
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 if ([string]::IsNullOrEmpty($ScriptDir)) { $ScriptDir = Get-Location }
-$GalleryDir = Join-Path $ScriptDir "gallery"
+$GalleryDir = Join-Path $ScriptDir "public/gallery"
 $OutFile = Join-Path $ScriptDir "js/gallery-data.js"
 $ReactOutFile = Join-Path $ScriptDir "src/gallery-data.js"
 
 # Create folders if they do not exist
 if (!(Test-Path $GalleryDir)) {
+    # Ensure public folder exists
+    $PublicDir = Join-Path $ScriptDir "public"
+    if (!(Test-Path $PublicDir)) {
+        New-Item -ItemType Directory -Path $PublicDir | Out-Null
+    }
     New-Item -ItemType Directory -Path $GalleryDir | Out-Null
     # Create some mock folders for demonstration
     New-Item -ItemType Directory -Path (Join-Path $GalleryDir "Veterans Memorial Ride 2026") | Out-Null
@@ -25,21 +30,23 @@ if (Test-Path $GalleryDir) {
     $SubDirs = Get-ChildItem -Path $GalleryDir -Directory
     foreach ($Dir in $SubDirs) {
         $DirName = $Dir.Name
+        # Strip leading numbers followed by an underscore or hyphen for the display name
+        # e.g., "01_Cannonball Poker Run" becomes "Cannonball Poker Run"
+        $DisplayName = $DirName -replace '^\d+[_-]', ''
+        
         # Get all images
         $Images = Get-ChildItem -Path $Dir.FullName -File | Where-Object { $_.Extension -match '^\.(jpg|jpeg|png|gif|webp|svg)$' }
         
         $ImgPaths = @()
         foreach ($Img in $Images) {
-            # Create a web-safe relative path
-            # gallery/SubFolder/Image.jpg
-            # Note: PowerShell joins with system slashes, so replace backslashes with forward slashes for the web page
+            # Use the original $DirName in the disk path so files serve correctly
             $RelativePath = "gallery/$DirName/$($Img.Name)"
             $ImgPaths += $RelativePath
         }
         
         # Include folders even if they are empty for now, so the header displays
         $FolderObj = [PSCustomObject]@{
-            folderName = $DirName
+            folderName = $DisplayName
             images     = $ImgPaths
         }
         $FoldersData += $FolderObj

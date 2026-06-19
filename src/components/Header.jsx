@@ -20,13 +20,13 @@ function Header() {
           {!logoError ? (
             <img
               src="/images/usmvmc_logo_transparent.png"
-              alt="USMV MC Logo"
+              alt="USMVMC Logo"
               className="logo-img"
               onError={() => setLogoError(true)}
             />
           ) : (
             <div id="logo-text" className="logo-fallback">
-              USMV <span>MC</span>
+              USMV<span>MC</span>
             </div>
           )}
         </Link>

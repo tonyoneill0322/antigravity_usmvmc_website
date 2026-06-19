@@ -27,6 +27,7 @@ function About() {
   const containerRef = useRef(null)
   const historyTextRef = useRef(null)
   const historyImgRef = useRef(null)
+  const localHistoryCardsRef = useRef([])
   const patchCardsRef = useRef([])
   const officerCardsRef = useRef([])
 
@@ -94,7 +95,7 @@ function About() {
           stagger: 0.15,
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: '.values-grid',
+            trigger: '.colors-wrapper',
             start: 'top 85%',
             toggleActions: 'play none none none'
           }
@@ -114,6 +115,25 @@ function About() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: '.officer-list',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      )
+    }
+
+    // 4. Local history cards scroll trigger
+    if (localHistoryCardsRef.current.length > 0) {
+      gsap.fromTo(localHistoryCardsRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.local-history-grid',
             start: 'top 85%',
             toggleActions: 'play none none none'
           }
@@ -311,21 +331,26 @@ function About() {
         <div className="about-grid">
           <div ref={historyTextRef}>
             <h2 id="history-heading">Our History</h2>
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--accent-gold)', textTransform: 'uppercase', marginBottom: '1.2rem', fontFamily: 'var(--font-heading)' }}>
+              National Motorcycle Club
+            </h3>
             <p>
-              Founded in 1975 by a group of Vietnam combat veterans returning to the East Coast, the{' '}
-              <strong>U.S. Military Veterans Motorcycle Club</strong> was born out of a simple need: to recreate the
-              intense brotherhood, trust, and shared values that can only be found in military service.
+              Established in 1987 in Fort Lauderdale, Florida and is incorporated as a non-profit organization.
             </p>
-            <p>
-              Struggling to find their place in a divided civilian society, these veterans found solace on two wheels.
-              The roar of the engines and the open road became their therapy, and the club became their sanctuary. Over the
-              decades, USMV MC has grown into a national organization, opening chapters in multiple states while keeping
-              our core principles intact.
+            <p style={{ marginBottom: '1rem' }}>
+              The club as a national organization strives to achieve the following:
             </p>
-            <p>
-              We do not care about the branch of service, the war, or the rank you held. If you served honorably under
-              the American flag and ride a cruiser, you are our brother.
-            </p>
+            <ul style={{ listStyle: 'none', paddingLeft: 0, marginBottom: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                To provide a club for qualified male military veterans which offers brotherhood and an opportunity to establish relationships with other military veterans who have served in the defense of the United States of America.
+              </li>
+              <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                To establish and support a strong sense of pride in having served in the active military service of the United States of America.
+              </li>
+              <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                To improve the image of military veterans and bikers to the public.
+              </li>
+            </ul>
           </div>
           <div ref={historyImgRef} className="about-img-container">
             <img
@@ -346,40 +371,156 @@ function About() {
             </div>
           </div>
         </div>
+
+        {/* Local Chapter Section */}
+        <div style={{ marginTop: '5rem' }}>
+          <h3 style={{ fontSize: '1.6rem', color: 'var(--accent-gold)', textTransform: 'uppercase', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)' }}>
+            Local Chapter: Indiana 9 (Cannonball)
+          </h3>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+            This chapter of the USMVMC is in Peru, Indiana. We call our local chapter "Cannonball" in recognition of the famous Wabash Cannonball. The Wabash Railroad adopted the name in 1949 for its daytime express between Detroit, Michigan, and St. Louis, Missouri.
+          </p>
+          
+          <div className="local-history-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            {/* Route & Stops */}
+            <div ref={(el) => (localHistoryCardsRef.current[0] = el)} className="feature-card" style={{ textAlign: 'left', padding: '2rem' }}>
+              <div className="feature-icon" style={{ justifyContent: 'flex-start' }}>🗺️</div>
+              <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>Route & Stops</h4>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: 0 }}>
+                488.8 miles across the Midwest, stopping at Fort Wayne, Huntington, Peru, Logansport, Lafayette, Danville, and Decatur, with arrivals/departures at St. Louis Union Station and Detroit's Fort Street Union Depot.
+              </p>
+            </div>
+            
+            {/* Legacy & Myths */}
+            <div ref={(el) => (localHistoryCardsRef.current[1] = el)} className="feature-card" style={{ textAlign: 'left', padding: '2rem' }}>
+              <div className="feature-icon" style={{ justifyContent: 'flex-start' }}>✍️</div>
+              <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>Legacy & Myths</h4>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                <strong>Legacy:</strong> It describes a fictional train called the Wabash Cannonball Express.
+              </p>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: 0 }}>
+                <strong>Hobo myth:</strong> Some believe it came from a tall tale of a mythical "death coach" train that carried hobos' souls to the afterlife, with the whistle heard at every station.
+              </p>
+            </div>
+            
+            {/* Paul Bunyan Legend */}
+            <div ref={(el) => (localHistoryCardsRef.current[2] = el)} className="feature-card" style={{ textAlign: 'left', padding: '2rem' }}>
+              <div className="feature-icon" style={{ justifyContent: 'flex-start' }}>🪓</div>
+              <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>Paul Bunyan Legend</h4>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: 0 }}>
+                Another story credits Cal S. Bunyan, Paul Bunyan's brother, who supposedly built a railroad so fast it arrived before it left.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* The Patch Meaning */}
       <section className="section section-alt">
         <div className="section-container">
           <div style={{ textAlign: 'center', marginBottom: '4rem', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
-            <h2 id="patch-heading">The USMV MC Colors</h2>
-            <p style={{ marginTop: '1rem' }}>
-              Our patch is not a decoration; it is a sacred symbol of our service, our sacrifice, and our commitment to each
-              other. Here is what our colors represent:
-            </p>
+            <h2 id="patch-heading">The USMVMC Colors</h2>
+          </div>
+
+          <div className="colors-wrapper" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center', marginBottom: '4rem' }}>
+            {/* Left side: Intro Paragraph & Image */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', margin: 0, color: 'var(--text-secondary)' }}>
+                Our patch is not a decoration; it is a sacred symbol of our service, our sacrifice, and our commitment to each other. 
+                USMVMC utilizes Black and 1084 Dark Taupe as our primary colors, in conjunction with our trademarked eagle logo.
+              </p>
+              <div 
+                style={{ 
+                  border: '2px solid var(--border-color)', 
+                  borderRadius: '6px', 
+                  padding: '1.5rem', 
+                  backgroundColor: 'var(--bg-secondary)', 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                }}
+              >
+                <img 
+                  src="/images/small_eagle.png" 
+                  alt="USMVMC Eagle Logo" 
+                  style={{ 
+                    maxHeight: '180px', 
+                    width: 'auto', 
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))' 
+                  }} 
+                />
+              </div>
+            </div>
+
+            {/* Right side: Represents (Eagle Card) */}
+            <div 
+              ref={(el) => (patchCardsRef.current[0] = el)} 
+            >
+              <div 
+                style={{ 
+                  backgroundColor: 'var(--bg-tertiary)', 
+                  border: '1px solid var(--accent-gold)', 
+                  borderRadius: '6px', 
+                  padding: '2.5rem', 
+                  boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)' 
+                }}
+              >
+                <h3 id="patch-eagle" style={{ borderBottom: '1px solid var(--accent-gold)', paddingBottom: '0.75rem', fontFamily: 'var(--font-heading)', fontSize: '1.8rem', color: 'var(--accent-gold)', marginBottom: '1.25rem', marginTop: 0 }}>
+                  Eagle
+                </h3>
+                <p style={{ fontWeight: 'bold', color: 'var(--accent-amber)', fontSize: '1.15rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                  Represents our ability to protect our values.
+                </p>
+                <ul style={{ listStyle: 'none', paddingLeft: 0, display: 'flex', flexDirection: 'column', gap: '1.25rem', margin: 0 }}>
+                  <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>American Flag:</strong> Symbol of our country and represents purity, valor & vigilance.
+                  </li>
+                  <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>Olive Branch:</strong> Represents our belief in a peaceful resolution to conflict.
+                  </li>
+                  <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>Arrows:</strong> Represents the branches of the military.
+                  </li>
+                  <li style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>Liberty Banner:</strong> Symbolizes our freedom from external forces.
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="values-grid">
             {/* Top Rocker */}
-            <div ref={(el) => (patchCardsRef.current[0] = el)} className="value-card">
-              <h3 id="patch-top">Top Rocker</h3>
-              <p>Identifies our name: "U.S. Military Vets". It represents our collective military heritage and pride in serving our country.</p>
-            </div>
-            {/* Center Emblem */}
             <div ref={(el) => (patchCardsRef.current[1] = el)} className="value-card">
-              <h3 id="patch-center">Center Emblem</h3>
-              <p>The Eagle shield emblem, symbolizing freedom, vigilance, and military courage, combined with a skull representing eternal brotherhood.</p>
+              <h3 id="patch-top">Top Rocker</h3>
+              <p>Identifies our club's name.</p>
             </div>
+
             {/* Bottom Rocker */}
             <div ref={(el) => (patchCardsRef.current[2] = el)} className="value-card">
               <h3 id="patch-bottom">Bottom Rocker</h3>
-              <p>Designates the local state chapter, showing our grounding in local communities and local veteran care.</p>
+              <p>Identifies a member's branch of service.</p>
             </div>
-            {/* Gold & Black */}
+
+            {/* Right Cube */}
             <div ref={(el) => (patchCardsRef.current[3] = el)} className="value-card">
-              <h3 id="patch-colors">Gold & Black</h3>
-              <p>Gold represents the value of honor and service; Black represents our mourning for fallen brothers and prisoners of war (POW/MIA).</p>
+              <h3 id="patch-right-cube">Right Cube</h3>
+              <p>Identifies us as a motorcycle club.</p>
             </div>
+
+            {/* Left Cube */}
+            <div ref={(el) => (patchCardsRef.current[4] = el)} className="value-card">
+              <h3 id="patch-left-cube">Left Cube</h3>
+              <p>Identifies the state a member hails from.</p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '4rem', textAlign: 'center', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto', padding: '2.5rem', border: '1px solid var(--accent-gold)', borderRadius: '6px', backgroundColor: 'var(--bg-tertiary)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+            <p style={{ fontStyle: 'italic', fontSize: '1.2rem', color: 'var(--accent-gold)', fontWeight: 'bold', margin: 0, lineHeight: '1.6' }}>
+              "Like when we were on active duty, these colors are our uniform and represent our unyielding dedication to Brotherhood."
+            </p>
           </div>
         </div>
       </section>
@@ -398,44 +539,36 @@ function About() {
           <div ref={(el) => (officerCardsRef.current[0] = el)} className="officer-card">
             <div className="officer-avatar">P</div>
             <div className="officer-role">President</div>
-            <h3 id="officer-pres">Gunny</h3>
+            <h3 id="officer-pres">Paws</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              U.S. Marine Corps (Ret.)
-              <br />
-              Vietnam Vet
+              U.S. Army Veteran
             </p>
           </div>
           {/* Officer 2 */}
           <div ref={(el) => (officerCardsRef.current[1] = el)} className="officer-card">
             <div className="officer-avatar">VP</div>
             <div className="officer-role">Vice President</div>
-            <h3 id="officer-vp">Doc</h3>
+            <h3 id="officer-vp">Topoff</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Navy Veteran
-              <br />
-              Desert Storm Vet
             </p>
           </div>
           {/* Officer 3 */}
           <div ref={(el) => (officerCardsRef.current[2] = el)} className="officer-card">
             <div className="officer-avatar">SA</div>
             <div className="officer-role">Sgt at Arms</div>
-            <h3 id="officer-saa">Spike</h3>
+            <h3 id="officer-saa">Eeyore</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Army Veteran
-              <br />
-              Operation Iraqi Freedom
             </p>
           </div>
           {/* Officer 4 */}
           <div ref={(el) => (officerCardsRef.current[3] = el)} className="officer-card">
-            <div className="officer-avatar">RC</div>
-            <div className="officer-role">Road Captain</div>
-            <h3 id="officer-rc">Cruiser</h3>
+            <div className="officer-avatar">Sec</div>
+            <div className="officer-role">Secretary</div>
+            <h3 id="officer-sec">Bluto</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              U.S. Air Force Veteran
-              <br />
-              Avid Road Master
+              U.S. Army Veteran
             </p>
           </div>
         </div>

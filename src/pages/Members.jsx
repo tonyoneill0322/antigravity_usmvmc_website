@@ -132,7 +132,7 @@ function Members() {
                   WELCOME, PATCHED BROTHER
                 </span>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: '10px' }}>
-                  | USMV MC Internal Portal
+                  | USMVMC Internal Portal
                 </span>
               </div>
               <button

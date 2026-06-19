@@ -66,7 +66,7 @@ function Contact() {
           <div ref={formRef}>
             <h2>Contact & Application</h2>
             <p style={{ marginBottom: '2rem' }}>
-              To contact a local officer or begin the prospecting process to join the USMV MC, please fill out the form below. For membership applications, ensure you meet the requirements on the right.
+              To contact a local officer or begin the prospecting process to join the USMVMC, please fill out the form below. For membership applications, ensure you meet the requirements on the right.
             </p>
 
             <form onSubmit={handleSubmit} id="join-form">
@@ -145,7 +145,7 @@ function Contact() {
                   value={formData.message}
                   onChange={handleInputChange}
                   className="form-control"
-                  placeholder="Tell us about yourself, your service background, and why you want to ride with USMV MC..."
+                  placeholder="Tell us about yourself, your service background, and why you want to ride with USMVMC..."
                   required
                 ></textarea>
               </div>
@@ -178,7 +178,7 @@ function Contact() {
             <div className="requirements-box">
               <h3 id="req-heading">Membership Requirements</h3>
               <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
-                USMV MC is a traditional MC. Prospecting is a process built on commitment, honor, and time on the road. The minimum entry standards are:
+                USMVMC is a traditional MC. Prospecting is a process built on commitment, honor, and time on the road. The minimum entry standards are:
               </p>
               <ul className="requirements-list">
                 <li>

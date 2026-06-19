@@ -1,7 +1,7 @@
 @echo off
-title USMV MC - Photo Gallery Scanner
+title USMVMC - Photo Gallery Scanner
 echo ===================================================
-echo   USMV MC WEBSITE - PHOTO GALLERY AUTO-SCANNER
+echo   USMVMC WEBSITE - PHOTO GALLERY AUTO-SCANNER
 echo ===================================================
 echo.
 echo Scanning the "gallery/" folder and generating js/gallery-data.js...

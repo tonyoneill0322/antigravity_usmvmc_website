@@ -280,10 +280,40 @@ footer {
 
 .footer-links a {
   font-family: var(--font-subheading);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   text-transform: uppercase;
-  font-weight: 500;
-  color: var(--text-secondary);
+  letter-spacing: 1.5px;
+  padding: 0.25rem 0;
+  position: relative;
+  color: var(--text-primary);
+  display: inline-block;
+  transition: var(--transition-fast);
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-amber);
+  transition: var(--transition-normal);
+  box-shadow: 0 0 8px var(--accent-amber-glow);
+}
+
+.footer-links a:hover::after,
+.footer-links a.active::after {
+  width: 100%;
+}
+
+.footer-links a:hover {
+  color: var(--accent-amber);
+}
+
+.footer-links a.active {
+  color: var(--accent-gold);
 }
 
 .footer-contact p {
@@ -578,6 +608,12 @@ footer {
   text-transform: uppercase;
   color: var(--accent-amber);
   margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .eagle-value-card {
+    grid-column: span 2;
+  }
 }
 
 /* ==========================================================================
