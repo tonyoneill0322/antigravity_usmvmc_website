@@ -3,6 +3,7 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 if ([string]::IsNullOrEmpty($ScriptDir)) { $ScriptDir = Get-Location }
 $GalleryDir = Join-Path $ScriptDir "gallery"
 $OutFile = Join-Path $ScriptDir "js/gallery-data.js"
+$ReactOutFile = Join-Path $ScriptDir "src/gallery-data.js"
 
 # Create folders if they do not exist
 if (!(Test-Path $GalleryDir)) {
@@ -48,9 +49,13 @@ if (Test-Path $GalleryDir) {
 # Convert to JSON string
 $Json = ConvertTo-Json -InputObject $FoldersData -Depth 5 -Compress
 
-# Output to js/gallery-data.js
+# Output to js/gallery-data.js (legacy/fallback)
 $JsContent = "const galleryData = $Json;"
 Set-Content -Path $OutFile -Value $JsContent -Encoding utf8
 
-Write-Host "Gallery manifest successfully updated at: $OutFile"
+# Output to src/gallery-data.js (React ES module)
+$ReactJsContent = "export const galleryData = $Json;"
+Set-Content -Path $ReactOutFile -Value $ReactJsContent -Encoding utf8
+
+Write-Host "Gallery manifests successfully updated!"
 Write-Host "Found $($FoldersData.Count) folder(s)."
