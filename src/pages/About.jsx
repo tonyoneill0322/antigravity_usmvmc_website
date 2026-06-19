@@ -5,6 +5,24 @@ import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const quotes = [
+  "Respect the patch, fear the reaper.",
+  "Keep your bike in good repair: motorcycle boots are not comfortable for walking.",
+  "Straight roads never made skilled riders.",
+  "Ride it like you stole it.",
+  "Four wheels move the body. Two wheels move the soul.",
+  "Life is short. Grip it and rip it.",
+  "Ride hard or stay home.",
+  "Born to ride, forced to work.",
+  "My other ride is your mom.",
+  "If you can read this, my girlfriend fell off.",
+  "Loud pipes save lives… and annoy neighbors.",
+  "Ride first, adult later.",
+  "The only time I feel alive is when I’m riding.",
+  "Bikes don’t leak oil, they mark territory.",
+  "Don’t fear dying, fear not living."
+];
+
 function About() {
   const containerRef = useRef(null)
   const historyTextRef = useRef(null)
@@ -13,11 +31,30 @@ function About() {
   const officerCardsRef = useRef([])
 
   const [isAnimating, setIsAnimating] = useState(false)
+  const [quoteIndex, setQuoteIndex] = useState(() => {
+    const saved = sessionStorage.getItem('aboutQuoteIndex')
+    return saved ? parseInt(saved, 10) : 0
+  })
   const motorcycleRef = useRef(null)
+  const quoteRef = useRef(null)
   const audioRef = useRef(null)
   const rumbleRef = useRef(null)
 
-  // Initialize audio asset on mount
+  // Clean helper to start/restart the subtle idle engine rumble
+  const startRumble = () => {
+    rumbleRef.current?.kill()
+    rumbleRef.current = gsap.to(motorcycleRef.current, {
+      x: 'random(-1.6, 1.6)',
+      y: 'random(-1.6, 1.6)',
+      rotation: 'random(-0.7, 0.7)',
+      duration: 0.08,
+      repeat: -1,
+      yoyo: true,
+      ease: 'none'
+    })
+  }
+
+  // Initialize audio asset and cleanup rumble on mount/unmount
   useEffect(() => {
     const audio = new Audio('/images/harleysound.mp3')
     audio.preload = 'auto'
@@ -27,22 +64,14 @@ function About() {
       if (audioRef.current) {
         audioRef.current.pause()
       }
+      rumbleRef.current?.kill()
     }
   }, [])
 
   // Hook context safe helper for event handling
   const { contextSafe } = useGSAP(() => {
     // Subtle idle engine rumble (shakes immediately on mount)
-    rumbleRef.current = gsap.to(motorcycleRef.current, {
-      x: 'random(-1.6, 1.6)',
-      y: 'random(-1.6, 1.6)',
-      rotation: 'random(-0.7, 0.7)',
-      duration: 0.08,
-      repeat: -1,
-      yoyo: true,
-      ease: 'none',
-      paused: false
-    })
+    startRumble()
 
     // 1. History Section Fade-In
     gsap.fromTo(historyTextRef.current,
@@ -123,8 +152,8 @@ function About() {
     if (isAnimating || !audioRef.current) return
     setIsAnimating(true)
 
-    // Stop idle rumble
-    rumbleRef.current?.pause()
+    // Stop and kill idle rumble
+    rumbleRef.current?.kill()
     gsap.killTweensOf(motorcycleRef.current)
     
     // Reset position and set starting scale/filter state for clean takeoff
@@ -132,7 +161,18 @@ function About() {
       x: 0, 
       y: 0, 
       scale: 1.03, 
-      filter: 'sepia(0) contrast(1.15) brightness(0.95)' 
+      opacity: 1,
+      rotation: 0,
+      rotationY: 0,
+      skewY: 0,
+      filter: 'sepia(0) contrast(1.15) brightness(0.95)',
+      transformOrigin: '50% 50%'
+    })
+
+    // Reset quote container position and opacity
+    gsap.set(quoteRef.current, {
+      y: '100%',
+      opacity: 0
     })
 
     const audio = audioRef.current
@@ -144,36 +184,28 @@ function About() {
       console.log("Audio playback blocked:", err)
     })
 
-    // Takeoff Timeline
+    // Compute reading duration:
+    // For <= 6 words: 0.5 seconds per word (min 1.8 seconds)
+    // For > 6 words: a base of 3 seconds, plus 0.8 seconds per additional word to ensure readability
+    const currentQuote = quotes[quoteIndex]
+    const wordCount = currentQuote.split(/\s+/).filter(Boolean).length
+    const readingDuration = wordCount <= 6 
+      ? Math.max(1.8, wordCount * 0.5) 
+      : 3.0 + (wordCount - 6) * 0.8
+
+    // Advance quote index for the next click (rotates 0-14) and persist in sessionStorage
+    setQuoteIndex((prev) => {
+      const next = (prev + 1) % quotes.length
+      sessionStorage.setItem('aboutQuoteIndex', next.toString())
+      return next
+    })
+
+    // Takeoff & Quote Timeline
     const tl = gsap.timeline({
       onComplete: () => {
-        // Reset sequence: wait 1.2s and fade back in from left
-        gsap.delayedCall(1.2, () => {
-          gsap.fromTo(motorcycleRef.current,
-            {
-              x: '-100vw',
-              y: 0,
-              scale: 0.5,
-              opacity: 0,
-              rotation: 0,
-              rotationY: 0,
-              skewY: 0
-            },
-            {
-              x: 0,
-              y: 0,
-              scale: 1,
-              opacity: 1,
-              duration: 1.5,
-              ease: 'power2.out',
-              onComplete: () => {
-                setIsAnimating(false)
-                // Resume idle rumble
-                rumbleRef.current?.play()
-              }
-            }
-          )
-        })
+        setIsAnimating(false)
+        // Resume idle rumble fresh
+        startRumble()
       }
     })
 
@@ -219,6 +251,57 @@ function About() {
         }, 80)
       }
     })
+
+    // Pop the wheelie: rotate from the right about 35 degrees at the start of Phase 3
+    tl.to(motorcycleRef.current, {
+      rotation: -35,
+      transformOrigin: '25% 85%',
+      duration: 0.6,
+      ease: 'back.out(1.5)'
+    }, '<')
+
+    // Quote scrolls onto the page as the bike scrolls off
+    tl.set(quoteRef.current, {
+      y: '100%',
+      opacity: 0
+    }, '<0.3')
+
+    tl.to(quoteRef.current, {
+      y: '0%',
+      opacity: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    })
+
+    // Wait readingDuration, then quote scrolls off/up
+    tl.to(quoteRef.current, {
+      y: '-100%',
+      opacity: 0,
+      duration: 0.5,
+      ease: 'power2.in',
+      delay: readingDuration
+    })
+
+    // Bike comes back in from the left
+    tl.set(motorcycleRef.current, {
+      x: '-100vw',
+      y: 0,
+      scale: 0.5,
+      opacity: 0,
+      rotation: 0,
+      rotationY: 0,
+      skewY: 0,
+      transformOrigin: '50% 50%'
+    })
+
+    tl.to(motorcycleRef.current, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      duration: 1.5,
+      ease: 'power2.out'
+    })
   })
 
   return (
@@ -255,6 +338,12 @@ function About() {
               onMouseLeave={handleMouseLeave}
               onClick={handleMotorcycleClick}
             />
+            {/* Quote Wrapper that clips the sliding text */}
+            <div className="about-bike-quote-wrapper">
+              <div ref={quoteRef} className="about-bike-quote">
+                “{quotes[quoteIndex]}”
+              </div>
+            </div>
           </div>
         </div>
       </section>
