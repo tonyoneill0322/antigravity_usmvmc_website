@@ -4,9 +4,24 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 
+// Register ScrollTrigger plugin with GSAP for managing scroll-driven animations
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * Home Component
+ * 
+ * Renders the homepage layout of the USMVMC website. 
+ * Features:
+ * - Full-screen Hero banner with ken-burns parallax scaling effect.
+ * - Mission statement section.
+ * - Strive cards section (Brotherhood, Pride, Image).
+ * - Philosophy column & Earning Your Patch block.
+ * - "Official Club Communication" block containing the Memo from the National President at the bottom.
+ * 
+ * Uses GSAP scroll-triggers for dynamic staggering and card pop-ins as they enter the viewport.
+ */
 function Home() {
+  // DOM references for scoping GSAP animations within the container
   const containerRef = useRef(null)
   const heroTitleRef = useRef(null)
   const heroTaglineRef = useRef(null)
@@ -16,8 +31,9 @@ function Home() {
   const memoRef = useRef(null)
   const philosophySectionRef = useRef(null)
 
+  // useGSAP hook ensures clean animation registers and automatic trigger cleanups on unmount
   useGSAP(() => {
-    // 1. Hero Load Animations
+    // 1. Hero Load Animations: scaling down background and sliding in titles
     gsap.fromTo(heroBgRef.current,
       { scale: 1.1 },
       { scale: 1, duration: 8, ease: 'power1.out' }
@@ -38,9 +54,7 @@ function Home() {
       { opacity: 1, y: 0, duration: 1.2, delay: 0.7, ease: 'power3.out' }
     )
 
-
-
-    // 3. Scroll Trigger for What We Strive For
+    // 2. Scroll Trigger for "What We Strive For" cards stagger-up animation
     if (striveRef.current) {
       const striveCards = striveRef.current.querySelectorAll('.strive-card')
       gsap.fromTo(striveCards,
@@ -60,7 +74,7 @@ function Home() {
       )
     }
 
-    // 4. Scroll Trigger for Memo from the National President
+    // 3. Scroll Trigger for the "Memo from the National President" section fade-in
     if (memoRef.current) {
       gsap.fromTo(memoRef.current,
         { opacity: 0, y: 40 },
@@ -78,7 +92,7 @@ function Home() {
       )
     }
 
-    // 5. Scroll Trigger for Philosophy & Earning Your Patch
+    // 4. Scroll Trigger for Philosophy & Earning Your Patch grid columns
     if (philosophySectionRef.current) {
       gsap.fromTo(philosophySectionRef.current.children,
         { opacity: 0, y: 50 },
@@ -96,11 +110,11 @@ function Home() {
         }
       )
     }
-  }, { scope: containerRef })
+  }, { scope: containerRef }) // Scope triggers limits selectors within containerRef to avoid memory leaks
 
   return (
     <div ref={containerRef}>
-      {/* Hero Banner */}
+      {/* Hero Banner with motorcycle background */}
       <section className="hero">
         <div 
           ref={heroBgRef}
@@ -123,7 +137,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Mission Statement */}
+      {/* Mission Statement Row */}
       <section className="section">
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <h2 id="mission-heading">Fostering Brotherhood & Service</h2>
@@ -136,14 +150,14 @@ function Home() {
         </div>
       </section>
 
-      {/* What We Strive For */}
+      {/* What We Strive For Section */}
       <section ref={striveRef} className="section section-alt">
         <div className="section-container">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <h2 id="strive-heading">What We Strive For</h2>
           </div>
           <div className="feature-grid">
-            {/* Strive Card 1 */}
+            {/* Strive Card 1: Brotherhood details */}
             <div className="strive-card feature-card">
               <div className="feature-icon">🤝</div>
               <h3>Brotherhood</h3>
@@ -152,7 +166,7 @@ function Home() {
                 relationships with other military veterans who have served in the defense of the United States of America.
               </p>
             </div>
-            {/* Strive Card 2 */}
+            {/* Strive Card 2: Pride details */}
             <div className="strive-card feature-card">
               <div className="feature-icon">🎖️</div>
               <h3>Pride & Honor</h3>
@@ -161,7 +175,7 @@ function Home() {
                 United States of America.
               </p>
             </div>
-            {/* Strive Card 3 */}
+            {/* Strive Card 3: Image details */}
             <div className="strive-card feature-card">
               <div className="feature-icon">🏍️</div>
               <h3>Public Image</h3>
@@ -173,7 +187,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Philosophy of the Traditional MC & Earning Your Patch */}
+      {/* Philosophy of the Traditional MC & Earning Your Patch split-column */}
       <section className="section section-alt">
         <div className="section-container">
           <div 
@@ -184,7 +198,7 @@ function Home() {
               gap: '4rem' 
             }}
           >
-            {/* Philosophy */}
+            {/* Column 1: Philosophy (Includes requested bold and gold formatted titles) */}
             <div>
               <h2 id="philosophy-heading" style={{ borderBottom: '2px solid var(--accent-gold)', paddingBottom: '0.5rem', marginBottom: '1.5rem', display: 'inline-block' }}>
                 Philosophy of the Traditional MC
@@ -203,7 +217,7 @@ function Home() {
               </div>
             </div>
 
-            {/* Earning Your Patch */}
+            {/* Column 2: Earning Your Patch detail block */}
             <div style={{ backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', padding: '2.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
               <h2 id="patch-heading" style={{ borderBottom: '2px solid var(--accent-gold)', paddingBottom: '0.5rem', marginBottom: '1.5rem', display: 'inline-block' }}>
                 Earning Your Patch
@@ -222,7 +236,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Memo from the National President */}
+      {/* Memo from the National President (Positioned at the absolute end of the page) */}
       <section className="section">
         <div 
           ref={memoRef} 
@@ -235,6 +249,7 @@ function Home() {
             boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)' 
           }}
         >
+          {/* Official badge header override */}
           <div 
             style={{ 
               position: 'absolute', 

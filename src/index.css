@@ -1317,3 +1317,15 @@ textarea.form-control {
     margin-left: 0.75rem;
   }
 }
+
+/* Formspree field-level validation errors */
+.field-error {
+  color: #ff4d4d;
+  font-family: var(--font-subheading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: block;
+  margin-top: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

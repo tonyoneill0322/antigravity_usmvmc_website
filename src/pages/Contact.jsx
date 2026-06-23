@@ -1,8 +1,25 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { useForm, ValidationError } from '@formspree/react'
 
+/**
+ * Contact Component
+ * 
+ * Renders the membership application form and club contact page.
+ * Features:
+ * - Controlled input forms with fields for basic user details, military branch selection,
+ *   and cruiser motorcycle specs.
+ * - Connected live submission using the Formspree React SDK endpoint.
+ * - Validation on submit with custom error/success alerts.
+ * - Stricter listing of patch requirements on the side.
+ * - GSAP transition animations splitting open columns.
+ */
 function Contact() {
+  // Formspree Hook: binds our custom endpoint mnjyeonz
+  const [state, handleSubmit] = useForm('mnjyeonz')
+
+  // formData: Controls form state inputs
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,11 +27,16 @@ function Contact() {
     bikeInfo: '',
     message: ''
   })
+  
+  // feedback: Controls banner state notifying status of form submission
   const [feedback, setFeedback] = useState({ text: '', type: '' })
+  
+  // Refs for tracking elements
   const containerRef = useRef(null)
   const formRef = useRef(null)
   const reqBoxRef = useRef(null)
 
+  // useGSAP animation registers load transition offsets (slide form from left, requirements from right)
   useGSAP(() => {
     gsap.fromTo(formRef.current,
       { opacity: 0, x: -30 },
@@ -27,35 +49,33 @@ function Contact() {
     )
   }, { scope: containerRef })
 
+  // useEffect to handle Formspree submission feedback and resets
+  useEffect(() => {
+    if (state.succeeded) {
+      setFeedback({
+        text: 'APPLICATION SUBMITTED SUCCESSFULLY. A club officer will review your details and contact you shortly. Ride Safe.',
+        type: 'success'
+      })
+      // Clear controlled inputs state
+      setFormData({
+        name: '',
+        email: '',
+        serviceBranch: '',
+        bikeInfo: '',
+        message: ''
+      })
+    } else if (state.errors && state.errors.length > 0) {
+      setFeedback({
+        text: 'Submission failed. Please check the fields below and try again.',
+        type: 'error'
+      })
+    }
+  }, [state.succeeded, state.errors])
+
+  // Safely updates form fields state dynamically based on name attribute
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    if (!formData.name || !formData.email || !formData.message) {
-      setFeedback({
-        text: 'Please fill out all required fields.',
-        type: 'error'
-      })
-      return
-    }
-
-    setFeedback({
-      text: 'APPLICATION SUBMITTED SUCCESSFULLY. A club officer will review your details and contact you shortly. Ride Safe.',
-      type: 'success'
-    })
-
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      serviceBranch: '',
-      bikeInfo: '',
-      message: ''
-    })
   }
 
   return (
@@ -70,7 +90,7 @@ function Contact() {
             </p>
 
             <form onSubmit={handleSubmit} id="join-form">
-              {/* Name */}
+              {/* Name input */}
               <div className="form-group">
                 <label htmlFor="name">Full Name *</label>
                 <input
@@ -83,9 +103,10 @@ function Contact() {
                   placeholder="John 'Slick' Doe"
                   required
                 />
+                <ValidationError prefix="Name" field="name" errors={state.errors} className="field-error" />
               </div>
 
-              {/* Email */}
+              {/* Email input */}
               <div className="form-group">
                 <label htmlFor="email">Email Address *</label>
                 <input
@@ -98,9 +119,10 @@ function Contact() {
                   placeholder="john.doe@example.com"
                   required
                 />
+                <ValidationError prefix="Email" field="email" errors={state.errors} className="field-error" />
               </div>
 
-              {/* Service Branch */}
+              {/* Service Branch dropdown */}
               <div className="form-group">
                 <label htmlFor="service-branch">Military Service Branch</label>
                 <select
@@ -120,9 +142,10 @@ function Contact() {
                   <option value="active_duty">Active Duty (Any Branch)</option>
                   <option value="other">Non-Vet (Supporter Interest)</option>
                 </select>
+                <ValidationError prefix="Service Branch" field="serviceBranch" errors={state.errors} className="field-error" />
               </div>
 
-              {/* Motorcycle details */}
+              {/* Motorcycle specifications */}
               <div className="form-group">
                 <label htmlFor="bike-info">Motorcycle Brand & Displacement</label>
                 <input
@@ -134,9 +157,10 @@ function Contact() {
                   className="form-control"
                   placeholder="e.g., Harley-Davidson Softail (1690cc)"
                 />
+                <ValidationError prefix="Motorcycle Details" field="bikeInfo" errors={state.errors} className="field-error" />
               </div>
 
-              {/* Message */}
+              {/* Textarea Message */}
               <div className="form-group">
                 <label htmlFor="message">Message / Application Statement *</label>
                 <textarea
@@ -148,19 +172,21 @@ function Contact() {
                   placeholder="Tell us about yourself, your service background, and why you want to ride with USMVMC..."
                   required
                 ></textarea>
+                <ValidationError prefix="Message" field="message" errors={state.errors} className="field-error" />
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Action Button */}
               <button
                 type="submit"
                 className="btn btn-primary"
                 style={{ width: '100%', marginTop: '1rem' }}
                 id="submit-contact"
+                disabled={state.submitting}
               >
-                Submit Application
+                {state.submitting ? 'Submitting...' : 'Submit Application'}
               </button>
 
-              {/* Success/Error Message container */}
+              {/* Success/Error Message container banner */}
               {feedback.text && (
                 <div 
                   id="form-feedback" 
@@ -173,7 +199,7 @@ function Contact() {
             </form>
           </div>
 
-          {/* Requirements Block */}
+          {/* Requirements Information Block */}
           <div ref={reqBoxRef}>
             <div className="requirements-box">
               <h3 id="req-heading">Membership Requirements</h3>

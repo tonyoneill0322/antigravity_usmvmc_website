@@ -2,22 +2,41 @@ import React, { useState, useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
+/**
+ * Members Component
+ * 
+ * Renders the restricted Members Only portal.
+ * Features:
+ * - A secure passcode gate screen verifying input against the correct passcode ('USMV1975').
+ * - Session state persistence (checks sessionStorage on mount to keep users logged in).
+ * - A dashboard display showing internal announcements and downloadable resources (PDFs, GPX files).
+ * - GSAP visual transitions:
+ *   - Fades & scales the lock gate card on mount.
+ *   - Staggers the announcement cards and download rows when the dashboard unlocks.
+ */
 function Members() {
+  // isLoggedIn: Tracks user authentication status
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // passcode: Controlled text input for the authentication gate form
   const [passcode, setPasscode] = useState('')
+  // feedback: Controls visual success or passcode error banner messages
   const [feedback, setFeedback] = useState({ text: '', type: '' })
+  
+  // Refs for tracking DOM targets
   const containerRef = useRef(null)
   const gateRef = useRef(null)
   const dashboardRef = useRef(null)
 
+  // Secret passcode key value
   const correctPasscode = 'USMV1975'
 
+  // Persists logged-in status by querying storage on initial render
   useEffect(() => {
     const loggedInStatus = sessionStorage.getItem('usmvmc_logged_in') === 'true'
     setIsLoggedIn(loggedInStatus)
   }, [])
 
-  // GSAP entrance animations for Gate
+  // GSAP entrance animations for Gate (Runs only if logged out)
   useGSAP(() => {
     if (!isLoggedIn && gateRef.current) {
       gsap.fromTo(gateRef.current,
@@ -27,18 +46,20 @@ function Members() {
     }
   }, [isLoggedIn])
 
-  // GSAP entrance animations for Dashboard
+  // GSAP entrance animations for Dashboard (Runs after login state updates to true)
   useGSAP(() => {
     if (isLoggedIn && dashboardRef.current) {
       const logoutBar = dashboardRef.current.querySelector('.logout-bar')
       const title = dashboardRef.current.querySelector('h2')
       const columns = dashboardRef.current.querySelectorAll('.members-grid > div')
 
+      // Slide down the header toolbar and page heading
       gsap.fromTo([logoutBar, title],
         { opacity: 0, y: -20 },
         { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out' }
       )
 
+      // Stagger slide up the content columns (announcements and downloads)
       gsap.fromTo(columns,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power2.out', delay: 0.2 }
@@ -46,6 +67,7 @@ function Members() {
     }
   }, [isLoggedIn])
 
+  // Processes passcode check, logs in user on correct match, or displays access error banner
   const handleLoginSubmit = (e) => {
     e.preventDefault()
 
@@ -61,6 +83,7 @@ function Members() {
     }
   }
 
+  // Logs out user, clears session storage state, and resets gate input fields
   const handleLogout = () => {
     sessionStorage.removeItem('usmvmc_logged_in')
     setIsLoggedIn(false)
@@ -72,7 +95,7 @@ function Members() {
     <div ref={containerRef}>
       <section className="section" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         
-        {/* Passcode Gate Screen */}
+        {/* Passcode Gate Screen: Renders if logged out */}
         {!isLoggedIn ? (
           <div ref={gateRef} className="gate-wrapper">
             <div className="gate-card">
@@ -105,6 +128,7 @@ function Members() {
                   Unlock Dashboard
                 </button>
                 
+                {/* Custom error/invalid passcode banner */}
                 {feedback.text && (
                   <div 
                     id="passcode-feedback" 
@@ -122,7 +146,7 @@ function Members() {
             </div>
           </div>
         ) : (
-          /* Patched Members Dashboard */
+          /* Patched Members Dashboard: Renders if logged in */
           <div ref={dashboardRef} className="members-dashboard" style={{ width: '100%' }}>
             
             {/* Logout / Welcomer Bar */}
@@ -213,7 +237,7 @@ function Members() {
                     <h4>Memorial Ride Route MAP</h4>
                     <span>GPX Navigation File | ZIP</span>
                   </div>
-                  <a href="#" class="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
+                  <a href="#" className="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
                     Download
                   </a>
                 </div>
@@ -223,7 +247,7 @@ function Members() {
                     <h4>Meeting Minutes - May</h4>
                     <span>Published June 2, 2026 | PDF</span>
                   </div>
-                  <a href="#" class="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
+                  <a href="#" className="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
                     Download
                   </a>
                 </div>
@@ -233,7 +257,7 @@ function Members() {
                     <h4>Prospect Handbook</h4>
                     <span>Bylaws & Etiquette | PDF</span>
                   </div>
-                  <a href="#" class="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
+                  <a href="#" className="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={(e) => e.preventDefault()}>
                     Download
                   </a>
                 </div>

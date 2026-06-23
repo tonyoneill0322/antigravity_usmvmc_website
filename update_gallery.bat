@@ -4,7 +4,7 @@ echo ===================================================
 echo   USMVMC WEBSITE - PHOTO GALLERY AUTO-SCANNER
 echo ===================================================
 echo.
-echo Scanning the "gallery/" folder and generating js/gallery-data.js...
+echo Scanning the "public/gallery/" folder and generating src/gallery-data.js...
 echo.
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0update_gallery.ps1"
 echo.

@@ -2,7 +2,6 @@
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 if ([string]::IsNullOrEmpty($ScriptDir)) { $ScriptDir = Get-Location }
 $GalleryDir = Join-Path $ScriptDir "public/gallery"
-$OutFile = Join-Path $ScriptDir "js/gallery-data.js"
 $ReactOutFile = Join-Path $ScriptDir "src/gallery-data.js"
 
 # Create folders if they do not exist
@@ -19,9 +18,7 @@ if (!(Test-Path $GalleryDir)) {
     New-Item -ItemType Directory -Path (Join-Path $GalleryDir "Spring Charity Poker Run") | Out-Null
 }
 
-if (!(Test-Path (Join-Path $ScriptDir "js"))) {
-    New-Item -ItemType Directory -Path (Join-Path $ScriptDir "js") | Out-Null
-}
+
 
 $FoldersData = @()
 
@@ -56,9 +53,7 @@ if (Test-Path $GalleryDir) {
 # Convert to JSON string
 $Json = ConvertTo-Json -InputObject $FoldersData -Depth 5 -Compress
 
-# Output to js/gallery-data.js (legacy/fallback)
-$JsContent = "const galleryData = $Json;"
-Set-Content -Path $OutFile -Value $JsContent -Encoding utf8
+
 
 # Output to src/gallery-data.js (React ES module)
 $ReactJsContent = "export const galleryData = $Json;"

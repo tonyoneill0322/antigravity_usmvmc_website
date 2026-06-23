@@ -3,8 +3,10 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 
+// Register ScrollTrigger to manage scroll-driven staggering
 gsap.registerPlugin(ScrollTrigger)
 
+// Array of biker quotes displayed during the motorcycle takeoff interactive event
 const quotes = [
   "Respect the patch, fear the reaper.",
   "Keep your bike in good repair: motorcycle boots are not comfortable for walking.",
@@ -23,7 +25,16 @@ const quotes = [
   "Don’t fear dying, fear not living."
 ];
 
+/**
+ * About Component
+ * 
+ * Contains the club history, details about the Indiana 9 (Cannonball) chapter, 
+ * an interactive colors guide, and the active mother-chapter officers.
+ * Features an interactive "Click to Ride" motorcycle graphic that accelerates 
+ * off-screen and returns while sliding out a random biker quote.
+ */
 function About() {
+  // Container & ScrollTrigger DOM refs
   const containerRef = useRef(null)
   const historyTextRef = useRef(null)
   const historyImgRef = useRef(null)
@@ -31,17 +42,24 @@ function About() {
   const patchCardsRef = useRef([])
   const officerCardsRef = useRef([])
 
+  // isAnimating: Gates clicks while the motorcycle takeoff timeline is running
   const [isAnimating, setIsAnimating] = useState(false)
+  // quoteIndex: Tracks current index of the quotes array (persisted in sessionStorage)
   const [quoteIndex, setQuoteIndex] = useState(() => {
     const saved = sessionStorage.getItem('aboutQuoteIndex')
     return saved ? parseInt(saved, 10) : 0
   })
+  
+  // Interactive motorcycle graphic elements & audio refs
   const motorcycleRef = useRef(null)
   const quoteRef = useRef(null)
   const audioRef = useRef(null)
   const rumbleRef = useRef(null)
 
-  // Clean helper to start/restart the subtle idle engine rumble
+  /**
+   * Triggers a fast repeating, small coordinate translation tween to simulate 
+   * a vibrating engine idle rumble.
+   */
   const startRumble = () => {
     rumbleRef.current?.kill()
     rumbleRef.current = gsap.to(motorcycleRef.current, {
@@ -55,7 +73,7 @@ function About() {
     })
   }
 
-  // Initialize audio asset and cleanup rumble on mount/unmount
+  // Preload sound and clean up sound/rumble tweens on component unmount
   useEffect(() => {
     const audio = new Audio('/images/harleysound.mp3')
     audio.preload = 'auto'
@@ -69,12 +87,12 @@ function About() {
     }
   }, [])
 
-  // Hook context safe helper for event handling
+  // Hook wrapper containing page entrance and ScrollTrigger stagger animations
   const { contextSafe } = useGSAP(() => {
-    // Subtle idle engine rumble (shakes immediately on mount)
+    // Start idle engine vibration immediately on mount
     startRumble()
 
-    // 1. History Section Fade-In
+    // 1. History Section Fade-In on page load
     gsap.fromTo(historyTextRef.current,
       { opacity: 0, x: -30 },
       { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
@@ -84,7 +102,7 @@ function About() {
       { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out' }
     )
 
-    // 2. Colors cards scroll trigger
+    // 2. Colors cards: triggers stagger rise when the wrapper meets 85% viewport height
     if (patchCardsRef.current.length > 0) {
       gsap.fromTo(patchCardsRef.current,
         { opacity: 0, y: 50 },
@@ -103,7 +121,7 @@ function About() {
       )
     }
 
-    // 3. Officers scroll trigger
+    // 3. Officers: triggers stagger rise when the list enters the viewport
     if (officerCardsRef.current.length > 0) {
       gsap.fromTo(officerCardsRef.current,
         { opacity: 0, y: 50 },
@@ -122,7 +140,7 @@ function About() {
       )
     }
 
-    // 4. Local history cards scroll trigger
+    // 4. Local history (Cannonball Express) cards: scroll trigger slide-up
     if (localHistoryCardsRef.current.length > 0) {
       gsap.fromTo(localHistoryCardsRef.current,
         { opacity: 0, y: 40 },
@@ -142,9 +160,9 @@ function About() {
     }
   }, { scope: containerRef })
 
+  // mouseEnter: slightly scale up and remove sepia filter when hover starts
   const handleMouseEnter = contextSafe(() => {
     if (isAnimating) return
-    // Scale up and light up using GSAP
     gsap.to(motorcycleRef.current, {
       scale: 1.03,
       filter: 'sepia(0) contrast(1.15) brightness(0.95)',
@@ -153,30 +171,31 @@ function About() {
     })
   })
 
+  // mouseLeave: restore original layout scale and sepia coloring
   const handleMouseLeave = contextSafe(() => {
     if (isAnimating) return
-    // Scale down and return to sepia using GSAP
     gsap.to(motorcycleRef.current, {
       scale: 1,
       filter: 'sepia(0.2) contrast(1.1) brightness(0.8)',
       duration: 0.3,
       overwrite: 'auto',
       onComplete: () => {
-        // Reset rotation and translation so rumble works centered
+        // Reset coordinate modifications to ensure rumble runs centered
         gsap.set(motorcycleRef.current, { x: 0, y: 0, rotation: 0 })
       }
     })
   })
 
+  // motorcycleClick: executes the timeline flight and shows quotes
   const handleMotorcycleClick = contextSafe(() => {
     if (isAnimating || !audioRef.current) return
     setIsAnimating(true)
 
-    // Stop and kill idle rumble
+    // Halt idle vibration and kill other active tweens on the element
     rumbleRef.current?.kill()
     gsap.killTweensOf(motorcycleRef.current)
     
-    // Reset position and set starting scale/filter state for clean takeoff
+    // Set baseline coordinates and resets transforms for takeoff
     gsap.set(motorcycleRef.current, { 
       x: 0, 
       y: 0, 
@@ -189,7 +208,7 @@ function About() {
       transformOrigin: '50% 50%'
     })
 
-    // Reset quote container position and opacity
+    // Reset quote container position hidden below wrapper clip
     gsap.set(quoteRef.current, {
       y: '100%',
       opacity: 0
@@ -199,48 +218,48 @@ function About() {
     audio.volume = 1.0
     audio.currentTime = 0
 
-    // Play synchronized sound
+    // Play engine acceleration sound effect
     audio.play().catch((err) => {
       console.log("Audio playback blocked:", err)
     })
 
-    // Compute reading duration:
-    // For <= 6 words: 0.5 seconds per word (min 1.8 seconds)
-    // For > 6 words: a base of 3 seconds, plus 0.8 seconds per additional word to ensure readability
+    // Calculate reading duration:
+    // Short quotes (<= 6 words): 0.5s per word (min 1.8s)
+    // Long quotes (> 6 words): base of 3.0s, plus 0.8s per word after the 6th
     const currentQuote = quotes[quoteIndex]
     const wordCount = currentQuote.split(/\s+/).filter(Boolean).length
     const readingDuration = wordCount <= 6 
       ? Math.max(1.8, wordCount * 0.5) 
       : 3.0 + (wordCount - 6) * 0.8
 
-    // Advance quote index for the next click (rotates 0-14) and persist in sessionStorage
+    // Update index for next click and persist
     setQuoteIndex((prev) => {
       const next = (prev + 1) % quotes.length
       sessionStorage.setItem('aboutQuoteIndex', next.toString())
       return next
     })
 
-    // Takeoff & Quote Timeline
+    // Main flight timeline
     const tl = gsap.timeline({
       onComplete: () => {
         setIsAnimating(false)
-        // Resume idle rumble fresh
+        // Resume idle vibration at rest
         startRumble()
       }
     })
 
-    // Phase 1: Startup Vibration (0s - 1.5s)
+    // Phase 1: Engine rev startup vibration (0s - 1.5s)
     tl.to(motorcycleRef.current, {
       x: 'random(-2.5, 2.5)',
       y: 'random(-2.5, 2.5)',
       rotation: 'random(-1.2, 1.2)',
       duration: 0.05,
-      repeat: 30, // 30 * 0.05 = 1.5s
+      repeat: 30, // 30 iterations * 0.05s = 1.5 seconds
       yoyo: true,
       ease: 'none'
     })
 
-    // Phase 2: Bike pivots left (1.5s - 2.2s)
+    // Phase 2: Bike pivots backward slightly preparing for takeoff (1.5s - 2.2s)
     tl.to(motorcycleRef.current, {
       x: 0,
       y: 0,
@@ -251,7 +270,7 @@ function About() {
       ease: 'power1.inOut'
     })
 
-    // Phase 3: Accelerate away (2.2s - 5.0s)
+    // Phase 3: Accelerate off-screen and scale down to simulate depth (2.2s - 5.0s)
     tl.to(motorcycleRef.current, {
       x: '120vw',
       y: '120px',
@@ -260,7 +279,7 @@ function About() {
       duration: 2.8,
       ease: 'power2.in',
       onStart: () => {
-        // Sync volume fadeout
+        // Fade out volume in synchronization with distance
         let fadeInterval = setInterval(() => {
           if (audio.volume > 0.05) {
             audio.volume -= 0.05
@@ -272,7 +291,7 @@ function About() {
       }
     })
 
-    // Pop the wheelie: rotate from the right about 35 degrees at the start of Phase 3
+    // Pop the wheelie: pitch front wheel up 35 degrees relative to bottom-left axis
     tl.to(motorcycleRef.current, {
       rotation: -35,
       transformOrigin: '25% 85%',
@@ -280,7 +299,7 @@ function About() {
       ease: 'back.out(1.5)'
     }, '<')
 
-    // Quote scrolls onto the page as the bike scrolls off
+    // Transition Quote: slide quote container onto the screen as bike takes off
     tl.set(quoteRef.current, {
       y: '100%',
       opacity: 0
@@ -293,7 +312,7 @@ function About() {
       ease: 'power2.out'
     })
 
-    // Wait readingDuration, then quote scrolls off/up
+    // Wait for the readingDuration, then slide quote out
     tl.to(quoteRef.current, {
       y: '-100%',
       opacity: 0,
@@ -302,7 +321,7 @@ function About() {
       delay: readingDuration
     })
 
-    // Bike comes back in from the left
+    // Position bike off-screen left to prepare for return
     tl.set(motorcycleRef.current, {
       x: '-100vw',
       y: 0,
@@ -314,6 +333,7 @@ function About() {
       transformOrigin: '50% 50%'
     })
 
+    // Cruise back in to default center coordinates
     tl.to(motorcycleRef.current, {
       x: 0,
       y: 0,

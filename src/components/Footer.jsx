@@ -1,12 +1,25 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
+/**
+ * Footer Component
+ * 
+ * Displays the global club footer which is divided into three layout columns:
+ * 1. Club description and core mission.
+ * 2. Quick Links matching the header navigation layout vertically.
+ *    Uses NavLink elements which receive active styling dynamically based on the current route.
+ *    Also hooks into the global ScrollToTop listener to reset position.
+ * 3. Club contact and location meta information.
+ * 
+ * Incorporates statutory corporate trademarks and copy disclaimers at the bottom.
+ */
 function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
     <footer>
       <div className="footer-container">
+        {/* Column 1: About text */}
         <div className="footer-about">
           <h3>USMVMC</h3>
           <p>
@@ -15,10 +28,13 @@ function Footer() {
             charitable work and motorcycle advocacy.
           </p>
         </div>
+
+        {/* Column 2: Quick Links (vertical stack mirror of header navigation) */}
         <div className="footer-links">
           <h3>Quick Links</h3>
           <ul>
             <li>
+              {/* end attribute ensures it only matches the exact "/" root path */}
               <NavLink to="/" end>Home</NavLink>
             </li>
             <li>
@@ -38,6 +54,8 @@ function Footer() {
             </li>
           </ul>
         </div>
+
+        {/* Column 3: Contact details */}
         <div className="footer-contact">
           <h3>Contact Info</h3>
           <p>📍 National Headquarters</p>
@@ -45,6 +63,8 @@ function Footer() {
           <p>🏍️ Ride Safe. Ride Honorably.</p>
         </div>
       </div>
+
+      {/* Bottom bar: Copyright, trademark, and non-profit disclaimer */}
       <div className="footer-bottom">
         <p>&copy; {currentYear} U.S. Military Veterans Motorcycle Club. All Rights Reserved.</p>
         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>

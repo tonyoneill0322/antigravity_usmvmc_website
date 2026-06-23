@@ -4,17 +4,35 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 
+// Register ScrollTrigger plugin with GSAP for managing scroll-driven animations
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * Gallery Component
+ * 
+ * Renders the photo gallery divided into folders parsed from `gallery-data.js`.
+ * Features:
+ * - Dynamic pagination (6 images per page) with custom GSAP transitions.
+ * - Flat lightbox index mapping allowing users to navigate through all images
+ *   sequentially across folders.
+ * - Keyboard listeners (Escape, Left/Right arrows) and scroll lock.
+ * - Special side-by-side layout for folders containing only one placeholder image,
+ *   displaying a customized "Pictures Coming Soon" label.
+ */
 function Gallery() {
+  // lightboxIndex: Absolute index of the currently open photo in the flat allImages list (null if closed)
   const [lightboxIndex, setLightboxIndex] = useState(null)
+  // folderPageMap: Local state tracking the current pagination page index for each folder
   const [folderPageMap, setFolderPageMap] = useState({})
+  // prevPageMapRef: Tracks prior page map states to prevent unwanted fade-in triggers on initial load
   const prevPageMapRef = useRef({})
+  
+  // DOM references for GSAP selectors scoping
   const containerRef = useRef(null)
   const introRef = useRef(null)
   const sectionsRef = useRef([])
 
-  // Flatten all images for sequential lightbox navigation
+  // 1. Flatten all images across folders for seamless lightbox navigation
   const allImages = []
   galleryData.forEach(folder => {
     folder.images.forEach(imgUrl => {
@@ -25,18 +43,21 @@ function Gallery() {
     })
   })
 
-  // GSAP animation for gallery page entry and scroll triggers
+  // GSAP animation for gallery page entry and section scroll triggers
   useGSAP(() => {
+    // Fade page intro down on mount
     gsap.fromTo(introRef.current,
       { opacity: 0, y: -20 },
       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
     )
 
+    // Register ScrollTriggers for each folder section
     sectionsRef.current.forEach((section, i) => {
       if (section) {
         const title = section.querySelector('.gallery-section-title')
         const items = section.querySelectorAll('.gallery-item')
 
+        // Slide heading text in from the left
         gsap.fromTo(title,
           { opacity: 0, x: -30 },
           {
@@ -52,6 +73,7 @@ function Gallery() {
           }
         )
 
+        // Stagger grid images scale-up
         if (items.length > 0) {
           gsap.fromTo(items,
             { opacity: 0, scale: 0.9, y: 30 },
@@ -74,46 +96,54 @@ function Gallery() {
     })
   }, { scope: containerRef })
 
-  // Lightbox keyboard navigation & body scroll lock
+  // Lightbox keyboard navigation & body overflow scroll-lock toggler
   useEffect(() => {
     if (lightboxIndex !== null) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden' // Prevent page background scrolling
+      
       const handleKeyDown = (e) => {
         if (e.key === 'Escape') setLightboxIndex(null)
         if (e.key === 'ArrowRight') handleNext()
         if (e.key === 'ArrowLeft') handlePrev()
       }
+      
       window.addEventListener('keydown', handleKeyDown)
+      
       return () => {
-        document.body.style.overflow = ''
+        document.body.style.overflow = '' // Restore scroll
         window.removeEventListener('keydown', handleKeyDown)
       }
     }
   }, [lightboxIndex])
 
+  // Move back in lightbox index (loops around to end if at 0)
   const handlePrev = (e) => {
     if (e) e.stopPropagation()
     setLightboxIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))
   }
 
+  // Move forward in lightbox index (loops around to 0 if at end)
   const handleNext = (e) => {
     if (e) e.stopPropagation()
     setLightboxIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1))
   }
 
-  // Find absolute index of image
+  // Retrieve absolute index of an image in the flat allImages list
   const getAbsoluteIndex = (url) => {
     return allImages.findIndex(img => img.url === url)
   }
 
-  // Handle slide/fade page transitions when arrow button is clicked
+  /**
+   * Animates current page items fading out, updates index states,
+   * then triggers the react pagination update.
+   */
   const handlePageChange = (folderName, direction, totalPages, sIdx) => {
     const sectionEl = sectionsRef.current[sIdx]
     if (!sectionEl) return
 
     const items = sectionEl.querySelectorAll('.gallery-item')
     
-    // Fade out current items
+    // Fade out current elements
     gsap.to(items, {
       opacity: 0,
       scale: 0.95,
@@ -122,7 +152,7 @@ function Gallery() {
       stagger: 0.02,
       ease: 'power2.in',
       onComplete: () => {
-        // Update page index state
+        // Update page map index
         setFolderPageMap((prev) => {
           const currentPage = prev[folderName] || 0
           let nextPage = currentPage + direction
@@ -137,7 +167,7 @@ function Gallery() {
     })
   }
 
-  // Handle stagger-fade-in animation for images when the folder page updates
+  // Stagger-fade-in animation trigger for new items after page state completes update
   useGSAP(() => {
     sectionsRef.current.forEach((section, sIdx) => {
       if (section) {
@@ -147,6 +177,7 @@ function Gallery() {
         const prevPage = prevPageMapRef.current[folder.folderName] || 0
         const currentPage = folderPageMap[folder.folderName] || 0
 
+        // If page changed, trigger the stagger entry animation on the new page's images
         if (currentPage !== prevPage) {
           const items = section.querySelectorAll('.gallery-item')
           gsap.fromTo(items,
@@ -165,13 +196,14 @@ function Gallery() {
       }
     })
 
-    // Sync previous page map ref
+    // Store current state for future frame differentials
     prevPageMapRef.current = { ...folderPageMap }
   }, [folderPageMap])
 
   return (
     <div ref={containerRef}>
       <section className="section">
+        {/* Intro */}
         <div ref={introRef} className="gallery-intro">
           <h2>Club Photo Gallery</h2>
           <p>
@@ -190,6 +222,8 @@ function Gallery() {
               const currentPage = folderPageMap[folder.folderName] || 0
               const totalPages = Math.ceil(folder.images.length / 6)
               const visibleImages = folder.images.slice(currentPage * 6, (currentPage + 1) * 6)
+              
+              // Detects placeholder folders: contains exactly 1 photo matching placeholder filenames
               const isPlaceholderOnly = folder.images.length === 1 && 
                 (folder.images[0].includes('poker1.jpg') || 
                  folder.images[0].includes('ride1.jpg') || 
@@ -205,6 +239,7 @@ function Gallery() {
                   <h3 className="gallery-section-title">{folder.folderName}</h3>
                   
                   <div className="gallery-section-wrapper" data-folder={folder.folderName}>
+                    {/* Left arrow: visible if there are multiple pages of photos */}
                     {totalPages > 1 && (
                       <button 
                         className={`gallery-scroll-arrow gallery-scroll-arrow-left ${currentPage === 0 ? 'disabled' : ''}`}
@@ -216,6 +251,7 @@ function Gallery() {
                     )}
 
                     <div className="gallery-grid-container" style={isPlaceholderOnly ? { width: '100%' } : {}}>
+                      {/* Conditional Render: Split layout for empty folders, normal grid otherwise */}
                       {isPlaceholderOnly ? (
                         <div style={{ 
                           display: 'grid', 
@@ -228,7 +264,7 @@ function Gallery() {
                           padding: '1.5rem',
                           boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
                         }}>
-                          {/* Left side: The single placeholder image */}
+                          {/* Left Column: Interactive placeholder graphic */}
                           <div
                             className="gallery-item"
                             onClick={() => setLightboxIndex(getAbsoluteIndex(folder.images[0]))}
@@ -248,16 +284,16 @@ function Gallery() {
                             </div>
                           </div>
 
-                          {/* Right side: Coming Soon Text */}
+                          {/* Right Column: "Pictures Coming Soon" visual notice */}
                           <div style={{ textAlign: 'center', padding: '1rem' }}>
                             <h4 style={{ 
-                              fontFamily: 'var(--font-heading)', 
-                              color: 'var(--accent-gold)', 
-                              fontSize: '2rem', 
-                              letterSpacing: '2px',
-                              marginBottom: '0.75rem',
-                              textTransform: 'uppercase'
-                            }}>
+                                fontFamily: 'var(--font-heading)', 
+                                color: 'var(--accent-gold)', 
+                                fontSize: '2rem', 
+                                letterSpacing: '2px',
+                                marginBottom: '0.75rem',
+                                textTransform: 'uppercase'
+                              }}>
                               Pictures Coming Soon
                             </h4>
                             <p style={{ color: 'var(--text-muted)', fontSize: '1rem', margin: 0, lineHeight: '1.6' }}>
@@ -300,6 +336,7 @@ function Gallery() {
                       )}
                     </div>
 
+                    {/* Right arrow: visible if there are multiple pages of photos */}
                     {totalPages > 1 && (
                       <button 
                         className={`gallery-scroll-arrow gallery-scroll-arrow-right ${currentPage === totalPages - 1 ? 'disabled' : ''}`}
@@ -317,13 +354,14 @@ function Gallery() {
         </div>
       </section>
 
-      {/* Lightbox UI Component */}
+      {/* Lightbox UI Component Modal overlay */}
       {lightboxIndex !== null && (
         <div 
           className="lightbox active" 
           style={{ display: 'flex', opacity: 1 }}
           onClick={() => setLightboxIndex(null)}
         >
+          {/* Close Button */}
           <button 
             className="lightbox-close" 
             aria-label="Close Lightbox"
@@ -332,6 +370,7 @@ function Gallery() {
             &times;
           </button>
           
+          {/* Previous Arrow */}
           <button 
             className="lightbox-prev lightbox-nav" 
             aria-label="Previous Photo"
@@ -340,6 +379,7 @@ function Gallery() {
             &#10094;
           </button>
 
+          {/* Photo Frame Container */}
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <img 
               className="lightbox-img" 
@@ -353,6 +393,7 @@ function Gallery() {
             <div className="lightbox-caption">{allImages[lightboxIndex].caption}</div>
           </div>
 
+          {/* Next Arrow */}
           <button 
             className="lightbox-next lightbox-nav" 
             aria-label="Next Photo"
