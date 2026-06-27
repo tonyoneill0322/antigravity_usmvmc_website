@@ -58,9 +58,15 @@ function Footer() {
         {/* Column 3: Contact details */}
         <div className="footer-contact">
           <h3>Contact Info</h3>
-          <p>📍 National Headquarters</p>
-          <p>✉️ info@usmvmc.org</p>
-          <p>🏍️ Ride Safe. Ride Honorably.</p>
+          <p>
+            📍 <a href="https://usmvmc.org/" target="_blank" rel="noopener noreferrer">National Headquarters</a>
+          </p>
+          <p>
+            ✉️ <a href="mailto:pawsin9@gmail.com">info@usmvmc.org</a>
+          </p>
+          <p>
+            🏍️ <a href="https://www.in.gov/rsi/about-us/" target="_blank" rel="noopener noreferrer">Ride Safe, Ride Honorably</a>
+          </p>
         </div>
       </div>
 

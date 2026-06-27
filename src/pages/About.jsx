@@ -563,6 +563,9 @@ function About() {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Army Veteran
             </p>
+            <a href="mailto:pawsin9@gmail.com" className="officer-email">
+              pawsin9@gmail.com
+            </a>
           </div>
           {/* Officer 2 */}
           <div ref={(el) => (officerCardsRef.current[1] = el)} className="officer-card">
@@ -572,6 +575,9 @@ function About() {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Navy Veteran
             </p>
+            <a href="mailto:topoffin9@gmail.com" className="officer-email">
+              topoffin9@gmail.com
+            </a>
           </div>
           {/* Officer 3 */}
           <div ref={(el) => (officerCardsRef.current[2] = el)} className="officer-card">
@@ -581,6 +587,9 @@ function About() {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Army Veteran
             </p>
+            <a href="mailto:eeyorein9@gmail.com" className="officer-email">
+              eeyorein9@gmail.com
+            </a>
           </div>
           {/* Officer 4 */}
           <div ref={(el) => (officerCardsRef.current[3] = el)} className="officer-card">
@@ -590,6 +599,9 @@ function About() {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               U.S. Army Veteran
             </p>
+            <a href="mailto:joeoutlaw13@gmail.com" className="officer-email">
+              joeoutlaw13@gmail.com
+            </a>
           </div>
         </div>
       </section>

@@ -35,9 +35,10 @@ function Gallery() {
   // 1. Flatten all images across folders for seamless lightbox navigation
   const allImages = []
   galleryData.forEach(folder => {
-    folder.images.forEach(imgUrl => {
+    folder.images.forEach(imgObj => {
       allImages.push({
-        url: imgUrl,
+        url: imgObj.optimized,
+        original: imgObj.original,
         caption: folder.folderName
       })
     })
@@ -129,8 +130,8 @@ function Gallery() {
   }
 
   // Retrieve absolute index of an image in the flat allImages list
-  const getAbsoluteIndex = (url) => {
-    return allImages.findIndex(img => img.url === url)
+  const getAbsoluteIndex = (originalUrl) => {
+    return allImages.findIndex(img => img.original === originalUrl)
   }
 
   /**
@@ -225,9 +226,9 @@ function Gallery() {
               
               // Detects placeholder folders: contains exactly 1 photo matching placeholder filenames
               const isPlaceholderOnly = folder.images.length === 1 && 
-                (folder.images[0].includes('poker1.jpg') || 
-                 folder.images[0].includes('ride1.jpg') || 
-                 folder.images[0].includes('placeholder_chopper.jpg'))
+                (folder.images[0].original.includes('poker1.jpg') || 
+                 folder.images[0].original.includes('ride1.jpg') || 
+                 folder.images[0].original.includes('placeholder_chopper.jpg'))
 
               return (
                 <div 
@@ -267,11 +268,11 @@ function Gallery() {
                           {/* Left Column: Interactive placeholder graphic */}
                           <div
                             className="gallery-item"
-                            onClick={() => setLightboxIndex(getAbsoluteIndex(folder.images[0]))}
+                            onClick={() => setLightboxIndex(getAbsoluteIndex(folder.images[0].original))}
                             style={{ maxWidth: '350px', margin: '0 auto', width: '100%' }}
                           >
                             <img
-                              src={`/${folder.images[0]}`}
+                              src={`/${folder.images[0].thumbnail}`}
                               alt={folder.folderName}
                               loading="lazy"
                               onError={(e) => {
@@ -311,14 +312,14 @@ function Gallery() {
                               </p>
                             </div>
                           ) : (
-                            visibleImages.map((imgUrl) => (
+                            visibleImages.map((imgObj) => (
                               <div
-                                key={imgUrl}
+                                key={imgObj.original}
                                 className="gallery-item"
-                                onClick={() => setLightboxIndex(getAbsoluteIndex(imgUrl))}
+                                onClick={() => setLightboxIndex(getAbsoluteIndex(imgObj.original))}
                               >
                                 <img
-                                  src={`/${imgUrl}`}
+                                  src={`/${imgObj.thumbnail}`}
                                   alt={folder.folderName}
                                   loading="lazy"
                                   onError={(e) => {
@@ -390,7 +391,20 @@ function Gallery() {
                 e.target.src = '/images/placeholder_chopper.jpg'
               }}
             />
-            <div className="lightbox-caption">{allImages[lightboxIndex].caption}</div>
+            <div className="lightbox-caption">
+              <div>{allImages[lightboxIndex].caption}</div>
+              <div style={{ marginTop: '0.6rem', fontSize: '0.9rem' }}>
+                <a 
+                  href={`/${allImages[lightboxIndex].original}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ color: 'var(--accent-gold)', textDecoration: 'underline' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Download Full-Res Original
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Next Arrow */}

@@ -324,6 +324,16 @@ footer {
   gap: 0.5rem;
 }
 
+.footer-contact a {
+  color: var(--text-secondary);
+  transition: var(--transition-fast);
+}
+
+.footer-contact a:hover {
+  color: var(--accent-amber);
+  text-shadow: 0 0 8px var(--accent-amber-glow);
+}
+
 .footer-bottom {
   text-align: center;
   border-top: 1px solid var(--border-color);
@@ -608,6 +618,20 @@ footer {
   text-transform: uppercase;
   color: var(--accent-amber);
   margin-bottom: 0.5rem;
+}
+
+.officer-email {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  margin-top: 0.75rem;
+  font-family: var(--font-subheading);
+  transition: var(--transition-fast);
+}
+
+.officer-email:hover {
+  color: var(--accent-amber);
+  text-shadow: 0 0 8px var(--accent-amber-glow);
 }
 
 /* ==========================================================================

@@ -124,13 +124,14 @@ function Contact() {
 
               {/* Service Branch dropdown */}
               <div className="form-group">
-                <label htmlFor="service-branch">Military Service Branch</label>
+                <label htmlFor="service-branch">Military Service Branch *</label>
                 <select
                   id="service-branch"
                   name="serviceBranch"
                   value={formData.serviceBranch}
                   onChange={handleInputChange}
                   className="form-control"
+                  required
                 >
                   <option value="">-- Select Branch (If applying to join) --</option>
                   <option value="army">U.S. Army</option>
@@ -139,15 +140,13 @@ function Contact() {
                   <option value="airforce">U.S. Air Force</option>
                   <option value="coastguard">U.S. Coast Guard</option>
                   <option value="spaceforce">U.S. Space Force</option>
-                  <option value="active_duty">Active Duty (Any Branch)</option>
-                  <option value="other">Non-Vet (Supporter Interest)</option>
                 </select>
                 <ValidationError prefix="Service Branch" field="serviceBranch" errors={state.errors} className="field-error" />
               </div>
 
               {/* Motorcycle specifications */}
               <div className="form-group">
-                <label htmlFor="bike-info">Motorcycle Brand & Displacement</label>
+                <label htmlFor="bike-info">Motorcycle Brand & Displacement *</label>
                 <input
                   type="text"
                   id="bike-info"
@@ -156,6 +155,7 @@ function Contact() {
                   onChange={handleInputChange}
                   className="form-control"
                   placeholder="e.g., Harley-Davidson Softail (1690cc)"
+                  required
                 />
                 <ValidationError prefix="Motorcycle Details" field="bikeInfo" errors={state.errors} className="field-error" />
               </div>
@@ -208,24 +208,22 @@ function Contact() {
               </p>
               <ul className="requirements-list">
                 <li>
-                  <strong>Military Service</strong>: Must be a current active-duty service member or a veteran discharged
-                  honorably (DD-214 verification required).
+                  <strong>Military Service</strong>: Army, Marine, Navy, Air Force, Coast Guard, and Space Force having served 181 days or more and be eligible for VA benefits. All branches of our MC are valued members.
+                  <ul style={{ paddingLeft: '1.5rem', marginTop: '0.5rem', listStyleType: 'circle' }}>
+                    <li>Must be a current active-duty service member or a veteran discharged honorably (DD-214 verification required).</li>
+                  </ul>
                 </li>
                 <li>
-                  <strong>Cruiser Bike</strong>: Must own and ride a cruiser-style motorcycle with an engine capacity of 750cc
-                  or greater.
+                  <strong>Cruiser Bike</strong>: Must own and ride a cruiser-style motorcycle with an engine capacity of 750cc or greater. Excluding Can-Am Spyder, Polaris Slingshot, and similar vehicles.
                 </li>
                 <li>
-                  <strong>License & Insurance</strong>: Must possess a valid motorcycle license (with proper state
-                  endorsement) and valid liability insurance.
+                  <strong>Arrest Rights</strong>: No one with arrest rights indicating a law enforcement position can obtain membership, regardless of prior military service.
                 </li>
                 <li>
-                  <strong>Brotherhood</strong>: Willingness to pledge loyalty to the club, participate in weekly meetings,
-                  and attend charity support runs.
+                  <strong>License & Insurance</strong>: Must possess a valid motorcycle license (with proper state endorsement) and valid liability insurance.
                 </li>
                 <li>
-                  <strong>Drug Policy</strong>: We adhere to clean and sober riding standards; respect for road safety is
-                  absolute.
+                  <strong>Brotherhood</strong>: Willingness to pledge loyalty to the club, participate in monthly meetings, pay monthly dues, and attend chapter sponsored events.
                 </li>
               </ul>
             </div>
