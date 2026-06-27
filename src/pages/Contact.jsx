@@ -16,8 +16,8 @@ import { useForm, ValidationError } from '@formspree/react'
  * - GSAP transition animations splitting open columns.
  */
 function Contact() {
-  // Formspree Hook: binds our custom endpoint mnjyeonz
-  const [state, handleSubmit] = useForm('mnjyeonz')
+  // Formspree Hook: binds our custom endpoint xjgqrbko
+  const [state, handleSubmit] = useForm('xjgqrbko')
 
   // formData: Controls form state inputs
   const [formData, setFormData] = useState({

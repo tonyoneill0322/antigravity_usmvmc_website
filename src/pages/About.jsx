@@ -55,6 +55,7 @@ function About() {
   const quoteRef = useRef(null)
   const audioRef = useRef(null)
   const rumbleRef = useRef(null)
+  const captionRef = useRef(null)
 
   /**
    * Triggers a fast repeating, small coordinate translation tween to simulate 
@@ -214,6 +215,11 @@ function About() {
       opacity: 0
     })
 
+    // Reset caption opacity
+    gsap.set(captionRef.current, {
+      opacity: 1
+    })
+
     const audio = audioRef.current
     audio.volume = 1.0
     audio.currentTime = 0
@@ -299,6 +305,13 @@ function About() {
       ease: 'back.out(1.5)'
     }, '<')
 
+    // Fade out the caption during takeoff
+    tl.to(captionRef.current, {
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.in'
+    }, '<')
+
     // Transition Quote: slide quote container onto the screen as bike takes off
     tl.set(quoteRef.current, {
       y: '100%',
@@ -342,6 +355,13 @@ function About() {
       duration: 1.5,
       ease: 'power2.out'
     })
+
+    // Fade in the caption when the bike returns
+    tl.to(captionRef.current, {
+      opacity: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '<0.5')
   })
 
   return (
@@ -383,6 +403,13 @@ function About() {
               onMouseLeave={handleMouseLeave}
               onClick={handleMotorcycleClick}
             />
+            <div 
+              ref={captionRef} 
+              className="about-image-caption" 
+              onClick={handleMotorcycleClick}
+            >
+              Click for thoughts!
+            </div>
             {/* Quote Wrapper that clips the sliding text */}
             <div className="about-bike-quote-wrapper">
               <div ref={quoteRef} className="about-bike-quote">

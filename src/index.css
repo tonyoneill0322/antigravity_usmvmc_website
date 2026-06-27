@@ -561,6 +561,24 @@ footer {
   will-change: transform, filter;
 }
 
+.about-image-caption {
+  text-align: center;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.about-image-caption:hover {
+  color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+
 
 .values-grid {
   display: grid;
