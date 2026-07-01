@@ -564,21 +564,19 @@ footer {
 .about-image-caption {
   text-align: center;
   margin-top: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
+  font-size: 1.2rem;
+  color: var(--accent-gold);
   font-family: var(--font-heading);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease;
+  text-shadow: 0 0 4px rgba(0,0,0,0.3);
 }
 
 .about-image-caption:hover {
   color: var(--accent-gold);
   transform: translateY(-2px);
 }
-
-
 
 .values-grid {
   display: grid;
