@@ -122,7 +122,7 @@ function Home() {
           style={{ backgroundImage: "url('/images/off_the_rails.png')" }}
         ></div>
         <div className="hero-content">
-          <h1 ref={heroTitleRef}>USMVMCIN9 - Cannonball</h1>
+          <h1 ref={heroTitleRef}>USMVMC</h1>
           <p ref={heroTaglineRef} className="hero-tagline">
             Riding with Honor. Serving Those Who Served.
           </p>
