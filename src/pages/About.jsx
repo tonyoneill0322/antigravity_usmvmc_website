@@ -577,14 +577,13 @@ function About() {
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h2 id="leadership-heading">Club Officers</h2>
           <p style={{ marginTop: '1rem' }}>
-            The leadership of the Mother Chapter responsible for executing the club bylaws and organizing runs.
+            The leadership of the Cannonball Chapter responsible for executing the club bylaws and organizing runs.
           </p>
         </div>
 
         <div className="officer-list">
           {/* Officer 1 */}
           <div ref={(el) => (officerCardsRef.current[0] = el)} className="officer-card">
-            <div className="officer-avatar">P</div>
             <div className="officer-role">President</div>
             <h3 id="officer-pres">Paws</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -596,7 +595,6 @@ function About() {
           </div>
           {/* Officer 2 */}
           <div ref={(el) => (officerCardsRef.current[1] = el)} className="officer-card">
-            <div className="officer-avatar">VP</div>
             <div className="officer-role">Vice President</div>
             <h3 id="officer-vp">Topoff</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -608,7 +606,6 @@ function About() {
           </div>
           {/* Officer 3 */}
           <div ref={(el) => (officerCardsRef.current[2] = el)} className="officer-card">
-            <div className="officer-avatar">SA</div>
             <div className="officer-role">Sgt at Arms</div>
             <h3 id="officer-saa">Eeyore</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -620,7 +617,6 @@ function About() {
           </div>
           {/* Officer 4 */}
           <div ref={(el) => (officerCardsRef.current[3] = el)} className="officer-card">
-            <div className="officer-avatar">Sec</div>
             <div className="officer-role">Secretary</div>
             <h3 id="officer-sec">Bluto</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -628,6 +624,17 @@ function About() {
             </p>
             <a href="mailto:joeoutlaw13@gmail.com" className="officer-email">
               joeoutlaw13@gmail.com
+            </a>
+          </div>
+          {/* Officer 5 */}
+          <div ref={(el) => (officerCardsRef.current[4] = el)} className="officer-card">
+            <div className="officer-role">Treasurer</div>
+            <h3 id="officer-treas">Drifter</h3>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              U.S. Army Veteran
+            </p>
+            <a href="mailto:drifter514@outlook.com" className="officer-email">
+              drifter514@outlook.com
             </a>
           </div>
         </div>

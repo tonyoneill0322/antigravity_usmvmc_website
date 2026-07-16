@@ -592,8 +592,9 @@ footer {
 }
 
 .officer-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2.5rem;
   margin-top: 3rem;
 }
@@ -605,6 +606,8 @@ footer {
   padding: 2rem 1.5rem;
   text-align: center;
   transition: var(--transition-fast);
+  flex: 1 1 240px;
+  max-width: 280px;
 }
 
 .officer-card:hover {

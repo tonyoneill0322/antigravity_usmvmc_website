@@ -33,6 +33,9 @@ function BikerAnimation() {
                        location.pathname === '';
     if (!isHomePage) return
 
+    // Check if the animation has already been triggered in the current session
+    if (sessionStorage.getItem('hasSeenBikerAnimation')) return
+
     // 2. Setup Audio - Preload the engine rev sound effect
     const audio = new Audio('/images/harleysound.mp3')
     audio.preload = 'auto'
@@ -50,6 +53,9 @@ function BikerAnimation() {
      */
     const triggerAnimation = (source) => {
       if (eventTriggered) return
+
+      // Mark the animation as completed for the current session
+      sessionStorage.setItem('hasSeenBikerAnimation', 'true')
 
       /**
        * Sub-routine to manage audio playback, start the visual transition, and fade out the volume.

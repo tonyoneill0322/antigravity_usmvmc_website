@@ -65,7 +65,7 @@ function Footer() {
             ✉️ <a href="mailto:pawsin9@gmail.com">info@usmvmc.org</a>
           </p>
           <p>
-            🏍️ <a href="https://www.in.gov/rsi/about-us/" target="_blank" rel="noopener noreferrer">Ride Safe, Ride Honorably</a>
+            🏍️ <a href="https://www.in.gov/rsi/about-us/" target="_blank" rel="noopener noreferrer">Indiana Ride Safe, Ride Honorably</a>
           </p>
         </div>
       </div>
